@@ -1,0 +1,40 @@
+PODS:
+  - Alamofire (4.5.1)
+  - CryptoSwift (0.7.2)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - MBProgressHUD (1.0.0)
+  - SDWebImage (4.4.2):
+    - SDWebImage/Core (= 4.4.2)
+  - SDWebImage/Core (4.4.2)
+  - SnapKit (4.0.1)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.5.0)
+  - CryptoSwift (~> 0.7.1)
+  - FMDB (~> 2.6)
+  - MBProgressHUD (~> 1.0.0)
+  - SDWebImage (~> 4.4.2)
+  - SnapKit (~> 4.0.0)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - CryptoSwift
+    - FMDB
+    - MBProgressHUD
+    - SDWebImage
+    - SnapKit
+
+SPEC CHECKSUMS:
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  CryptoSwift: cd2158be2bf639aabc63ec804707c7137c90157c
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
+  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
+
+PODFILE CHECKSUM: a59ac99a3498037d18a524ac629d3fb0e1c871e1
+
+COCOAPODS: 1.5.3
