@@ -13,7 +13,7 @@ class DDItem2NavVC: DDBaseNavVC {
         let rootVC = DDItem2VC()
 //        rootVC.title = DDLanguageManager.text("tabbar_item2_title")
         self.init(rootViewController: rootVC)
-        self.title = "消息"
+        self.title = "video"
         
         self.navigationBar.shadowImage = UIImage()
 //

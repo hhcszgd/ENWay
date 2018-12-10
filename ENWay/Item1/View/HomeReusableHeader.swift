@@ -8,14 +8,15 @@
 
 import UIKit
 import SDWebImage
-class HomeReusableHeader: DDCollectionReusableView {
+class HomeReusableHeader: UICollectionReusableView {
     let imageView = UIImageView()
     override init(frame: CGRect) {
         super.init(frame: frame )
         self.addSubview(imageView)
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = UIColor.green
         
-        imageView.contentMode = UIView.ContentMode.scaleAspectFit//UIView.ContentMode.scaleToFill//UIView.ContentMode.scaleAspectFill//
+        imageView.contentMode = UIView.ContentMode.scaleToFill//UIView.ContentMode.scaleToFill//UIView.ContentMode.scaleAspectFill//
+        imageView.image = UIImage(named: "individualaccount_bg")
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreLocation
-
+import SnapKit
 import Alamofire
 class DDItem2VC: DDNormalVC , UITextFieldDelegate{
     enum ShowType:String {
@@ -130,7 +130,7 @@ class DDItem2VC: DDNormalVC , UITextFieldDelegate{
         })
     }
     func configNaviBar() {
-        self.title = "消息"
+        self.title = "video"
 //        self.navigationController?.title = nil 
     }
     
