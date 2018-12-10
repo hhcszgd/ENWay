@@ -431,7 +431,7 @@ class DDOnceBackWebVC: DDNormalVC , WKScriptMessageHandler ,  WKNavigationDelega
      @available(iOS 8.0, *)
      */
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
-        self.title = webView.title
+//        self.title = webView.title
         webView.alpha = 0
         UIView.animate(withDuration: 0.2) {
             webView.alpha = 1
@@ -448,7 +448,7 @@ class DDOnceBackWebVC: DDNormalVC , WKScriptMessageHandler ,  WKNavigationDelega
      @available(iOS 8.0, *)
      */
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error){
-        self.title = webView.title
+//        self.title = webView.title
         mylog(webView.title)
     }
     

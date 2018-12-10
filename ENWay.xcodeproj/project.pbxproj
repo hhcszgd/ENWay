@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		150C65FE21BE0C5E0065BB12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 150C65FD21BE0C5D0065BB12 /* Assets.xcassets */; };
+		1515D6C621BE480A0074AB34 /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515D6C521BE48090074AB34 /* MusicPlayer.swift */; };
+		1515D6C821BE483F0074AB34 /* PlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515D6C721BE483F0074AB34 /* PlayVC.swift */; };
+		1515D6CB21BE49070074AB34 /* Music.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1515D6C921BE49060074AB34 /* Music.bundle */; };
+		1515D6CC21BE49070074AB34 /* Movie.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1515D6CA21BE49060074AB34 /* Movie.bundle */; };
+		1515D6CE21BE49710074AB34 /* DDAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515D6CD21BE49710074AB34 /* DDAVPlayer.swift */; };
+		1515D6D021BE57160074AB34 /* DDMusicPlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515D6CF21BE57160074AB34 /* DDMusicPlayVC.swift */; };
 		15A1F1BB21BDF0F900AB9A0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1F1BA21BDF0F900AB9A0A /* AppDelegate.swift */; };
 		15A1F1BD21BDF0F900AB9A0A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1F1BC21BDF0F900AB9A0A /* ViewController.swift */; };
 		15A1F1C021BDF0F900AB9A0A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15A1F1BE21BDF0F900AB9A0A /* Main.storyboard */; };
@@ -121,6 +127,12 @@
 
 /* Begin PBXFileReference section */
 		150C65FD21BE0C5D0065BB12 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1515D6C521BE48090074AB34 /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
+		1515D6C721BE483F0074AB34 /* PlayVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayVC.swift; sourceTree = "<group>"; };
+		1515D6C921BE49060074AB34 /* Music.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Music.bundle; sourceTree = "<group>"; };
+		1515D6CA21BE49060074AB34 /* Movie.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Movie.bundle; sourceTree = "<group>"; };
+		1515D6CD21BE49710074AB34 /* DDAVPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDAVPlayer.swift; sourceTree = "<group>"; };
+		1515D6CF21BE57160074AB34 /* DDMusicPlayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDMusicPlayVC.swift; sourceTree = "<group>"; };
 		15A1F1B721BDF0F900AB9A0A /* ENWay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ENWay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15A1F1BA21BDF0F900AB9A0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15A1F1BC21BDF0F900AB9A0A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -251,6 +263,8 @@
 		15A1F1AE21BDF0F900AB9A0A = {
 			isa = PBXGroup;
 			children = (
+				1515D6CA21BE49060074AB34 /* Movie.bundle */,
+				1515D6C921BE49060074AB34 /* Music.bundle */,
 				15A1F1B921BDF0F900AB9A0A /* ENWay */,
 				15A1F1B821BDF0F900AB9A0A /* Products */,
 				3DEE4C577204766CCB8B160D /* Pods */,
@@ -422,6 +436,8 @@
 		15A1F21121BDF7EC00AB9A0A /* tool */ = {
 			isa = PBXGroup;
 			children = (
+				1515D6C521BE48090074AB34 /* MusicPlayer.swift */,
+				1515D6CD21BE49710074AB34 /* DDAVPlayer.swift */,
 				15A1F21221BDF7EC00AB9A0A /* DDShowManager.swift */,
 				15A1F21321BDF7EC00AB9A0A /* DDPhotoManager.swift */,
 				15A1F21421BDF7EC00AB9A0A /* DDLanguageManager.swift */,
@@ -495,7 +511,9 @@
 		15A1F28221BDFCC100AB9A0A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				1515D6C721BE483F0074AB34 /* PlayVC.swift */,
 				15A1F28321BDFCC100AB9A0A /* DDItem1VC.swift */,
+				1515D6CF21BE57160074AB34 /* DDMusicPlayVC.swift */,
 				15A1F28421BDFCC100AB9A0A /* DDItem1NavVC.swift */,
 			);
 			path = Controller;
@@ -677,11 +695,13 @@
 				15A1F26B21BDF7EC00AB9A0A /* ResourceX.bundle in Resources */,
 				15A1F1C521BDF0FB00AB9A0A /* LaunchScreen.storyboard in Resources */,
 				15A1F26A21BDF7EC00AB9A0A /* loading4.png in Resources */,
+				1515D6CC21BE49070074AB34 /* Movie.bundle in Resources */,
 				15A1F26821BDF7EC00AB9A0A /* loading5.png in Resources */,
 				15A1F1C021BDF0F900AB9A0A /* Main.storyboard in Resources */,
 				15A1F26D21BDF7EC00AB9A0A /* loading2.png in Resources */,
 				150C65FE21BE0C5E0065BB12 /* Assets.xcassets in Resources */,
 				15A1F26F21BDF7EC00AB9A0A /* loading1.png in Resources */,
+				1515D6CB21BE49070074AB34 /* Music.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -743,6 +763,7 @@
 			files = (
 				15A1F24621BDF7EC00AB9A0A /* DDRootTabBarVC.swift in Sources */,
 				15A1F24321BDF7EC00AB9A0A /* DDBaseNavVC.swift in Sources */,
+				1515D6C821BE483F0074AB34 /* PlayVC.swift in Sources */,
 				15A1F24C21BDF7EC00AB9A0A /* GDLocation.swift in Sources */,
 				15A1F26421BDF7EC00AB9A0A /* DDShowManager.swift in Sources */,
 				15A1F28E21BDFCC100AB9A0A /* DDHuDongApiModel.swift in Sources */,
@@ -770,6 +791,7 @@
 				15A1F2B021BDFE2C00AB9A0A /* DDSearchVC.swift in Sources */,
 				15A1F29421BDFCC100AB9A0A /* HomeReusableHeader.swift in Sources */,
 				15A1F2B321BDFE2C00AB9A0A /* TestMoveItem2VC.swift in Sources */,
+				1515D6C621BE480A0074AB34 /* MusicPlayer.swift in Sources */,
 				15A1F24E21BDF7EC00AB9A0A /* GDIBPhoto.swift in Sources */,
 				15A1F27921BDF7EC00AB9A0A /* DDRequestManager.swift in Sources */,
 				15A1F22F21BDF7EC00AB9A0A /* ScrollView_extension.swift in Sources */,
@@ -788,6 +810,7 @@
 				15A1F28D21BDFCC100AB9A0A /* DDItem2NavVC.swift in Sources */,
 				15A1F2B721BDFE2C00AB9A0A /* QRView.swift in Sources */,
 				15A1F24221BDF7EC00AB9A0A /* GDBaseWebVC.swift in Sources */,
+				1515D6CE21BE49710074AB34 /* DDAVPlayer.swift in Sources */,
 				15A1F25421BDF7EC00AB9A0A /* DDNavigatBar.swift in Sources */,
 				15A1F23321BDF7EC00AB9A0A /* AttributeTitle+Extension.swift in Sources */,
 				15A1F24121BDF7EC00AB9A0A /* DDOnceBackWebVC.swift in Sources */,
@@ -840,6 +863,7 @@
 				15A1F23D21BDF7EC00AB9A0A /* DDNoNavibarVC.swift in Sources */,
 				15A1F1BB21BDF0F900AB9A0A /* AppDelegate.swift in Sources */,
 				15A1F25121BDF7EC00AB9A0A /* GDIBScrollView.swift in Sources */,
+				1515D6D021BE57160074AB34 /* DDMusicPlayVC.swift in Sources */,
 				15A1F27321BDF7EC00AB9A0A /* DDJsonCode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
