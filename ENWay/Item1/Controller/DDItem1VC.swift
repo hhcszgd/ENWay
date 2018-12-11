@@ -20,16 +20,16 @@ class MusicModel: NSObject , Codable {
 
 
 class DDItem1VC: DDNormalVC {
-    var musicModels : [MusicModel]?
-    var pdfModels : [MusicModel]?
+    var musicModels : [MediaModel]?
+    var pdfModels : [MediaModel]?
     let tableView = UITableView()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "音乐列表"
         self.configTableView()
         
-        musicModels = self.gotResourceInSubBundle()?.map({ (url ) -> MusicModel in
-            let model = MusicModel()
+        musicModels = self.gotResourceInSubBundle()?.map({ (url ) -> MediaModel in
+            let model = MediaModel()
             model.url = url
             model.name = url.lastPathComponent + ".\(url.pathExtension)"
             return model
@@ -38,11 +38,12 @@ class DDItem1VC: DDNormalVC {
             modelLeft.name < modelRight.name
         })
         self.pdfModels = self.gotPDFInSubBundle()
-        if DDAVPlayer.share.musics != self.musicModels {
-            DDAVPlayer.share.musics = self.musicModels
+        
+        if DDAVPlayer1.share.mediaModels  != self.musicModels ?? [] {
+            DDAVPlayer1.share.mediaModels = self.musicModels ?? []
         }
-        if DDAVPlayer.share.pdfModels != self.pdfModels{
-            DDAVPlayer.share.pdfModels = self.pdfModels
+        if DDAVPlayer1.share.pdfModels != self.pdfModels ?? []{
+            DDAVPlayer1.share.pdfModels = self.pdfModels
         }
         self.tableView.reloadData()
         // Do any additional setup after loading the view.
@@ -90,15 +91,15 @@ class DDItem1VC: DDNormalVC {
         //        return itemPath
         //    }
     }
-    func gotPDFInSubBundle() -> [MusicModel]? {
+    func gotPDFInSubBundle() -> [MediaModel]? {
         //        let bundle : Bundle = Bundle(for: AHPAPI.self)       //refreshBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[MJRefreshComponent class]] pathForResource:@"MJRefresh" ofType:@"bundle"]];
         
         let bundle = Bundle.main
         guard let subBundlePath = bundle.path(forResource: "Music", ofType: "bundle") else {return nil}
         guard let subBundle = Bundle(path: subBundlePath) else {return nil  }
         var pdfs = subBundle.urls(forResourcesWithExtension: "pdf", subdirectory: nil)
-        var temp  = pdfs?.map({ (url ) -> MusicModel in
-            let model = MusicModel()
+        var temp  = pdfs?.map({ (url ) -> MediaModel in
+            let model = MediaModel()
             model.url = url
             model.name = url.lastPathComponent + ".\(url.pathExtension)"
             return model
@@ -158,11 +159,11 @@ extension DDItem1VC : UITableViewDelegate , UITableViewDataSource{
         //            para["pdfs"] = self.pdfModels
         
 //        let vc = PlayVC()
-        let vc = DDMusicPlayVC()
+        let vc = DDMusicPlayVC1()
         
         //        vc.musicModel = musicModels
         //        vc.pdfModels = pdfModels
-        vc.currentIndex = indexPath.row
+        vc.currentMediaModel = self.musicModels?[indexPath.row]
         vc.userInfo = pdfModels?[indexPath.row].url?.absoluteString
         self.navigationController?.pushViewController(vc , animated: true )
         //            self.pushVC(vcIdentifier: "PlayVC", userInfo:para)

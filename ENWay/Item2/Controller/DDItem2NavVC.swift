@@ -10,7 +10,8 @@ import UIKit
 
 class DDItem2NavVC: DDBaseNavVC {
     convenience init(){
-        let rootVC = DDItem2VC()
+//        let rootVC = DDItem2VC()
+        let rootVC = VideoListVC()
 //        rootVC.title = DDLanguageManager.text("tabbar_item2_title")
         self.init(rootViewController: rootVC)
         self.title = "video"

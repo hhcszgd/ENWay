@@ -5,33 +5,30 @@
 //  Created by WY on 2018/12/10.
 //  Copyright © 2018 WY. All rights reserved.
 //
-
 import UIKit
-
 import SnapKit
-class DDMusicPlayVC: DDOnceBackWebVC {
-
-    var currentIndex : Int = -111
+class DDMusicPlayVC1: DDOnceBackWebVC {
+    
+    var currentMediaModel : MediaModel?
     let button = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
     let controlBUtton = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
     override func viewDidLoad() {
         super.viewDidLoad()
-        if  currentIndex != DDAVPlayer.share.currentMusicIndex{
-            DDAVPlayer.share.currentMusicIndex = currentIndex
-            DDAVPlayer.share.playMusic1()
+        if let model  = self.currentMediaModel{
+            DDAVPlayer1.share.play(mediaModel: model)
         }
         //        self.view.backgroundColor = UIColor.orange
-        let lastPathComponent = DDAVPlayer.share.musics?[DDAVPlayer.share.currentMusicIndex].url?.lastPathComponent ?? "name"
-        let pathExtension = DDAVPlayer.share.musics?[DDAVPlayer.share.currentMusicIndex].url?.pathExtension ?? "extexsion"
+        let lastPathComponent = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.lastPathComponent ?? "name"
+        let pathExtension = self.currentMediaModel?.url?.pathExtension ?? "extexsion"
         
         self.title = lastPathComponent + pathExtension
         //       self.loadPdf()
-        NotificationCenter.default.addObserver(self , selector: #selector(loadPdf), name: Notification.Name("ReloadPdfNotification"), object: DDAVPlayer.share)
+        NotificationCenter.default.addObserver(self , selector: #selector(loadPdf), name: Notification.Name("ReloadPdfNotification"), object: DDAVPlayer1.share)
         self.confitRightButton()
         // Do any additional setup after loading the view.
     }
     func confitRightButton() {
-        button.setTitle("下一篇", for: UIControl.State.normal)
+        button.setTitle("next", for: UIControl.State.normal)
         button.setTitleColor(UIColor.gray, for: UIControl.State.normal)
         button.addTarget(self , action: #selector(testReloadPdf), for: UIControl.Event.touchUpInside)
         
@@ -51,21 +48,23 @@ class DDMusicPlayVC: DDOnceBackWebVC {
         }
     }
     func stopPlay() {
-        DDAVPlayer.share.player.pause()
+        DDAVPlayer1.share.pause()
     }
     func performPlay() {
-        DDAVPlayer.share.player.play()
+        if let model  = self.currentMediaModel{
+            DDAVPlayer1.share.play(mediaModel :model)
+        }
     }
     @objc func testReloadPdf() {
-        DDAVPlayer.share.audioPlayerDidFinishPlaying( successfully: true)
+        DDAVPlayer1.share.audioPlayerDidFinishPlaying( successfully: true)
     }
     @objc func loadPdf() {
         mylog("重载")
-        let lastPathComponent = DDAVPlayer.share.musics?[DDAVPlayer.share.currentMusicIndex].url?.lastPathComponent ?? "name"
-        let pathExtension = DDAVPlayer.share.musics?[DDAVPlayer.share.currentMusicIndex].url?.pathExtension ?? "extexsion"
+        let lastPathComponent = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.lastPathComponent ?? "name"
+        let pathExtension = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.pathExtension ?? "extexsion"
         
         self.title = lastPathComponent + pathExtension
-        let pdfModel = DDAVPlayer.share.pdfModels?[DDAVPlayer.share.currentMusicIndex]
+        let pdfModel = DDAVPlayer1.share.pdfModels?[DDAVPlayer1.share.currentMediaIndex]
         if let url = pdfModel?.url {
             self.webView.load(URLRequest(url: url))
         }
@@ -94,10 +93,10 @@ class DDMusicPlayVC: DDOnceBackWebVC {
             if eventUnwrap.type == UIEvent.EventType.remoteControl {
                 switch eventUnwrap.subtype{
                 case .remoteControlPause://
-                    DDAVPlayer.share.player.pause()
+                    DDAVPlayer1.share.player.pause()
                     
                 case .remoteControlPlay://
-                    DDAVPlayer.share.player.play()
+                    DDAVPlayer1.share.player.play()
                     
                 case .remoteControlPreviousTrack:////上一曲
                     //                    MusicPlayer.share.player?.pause()
@@ -113,15 +112,6 @@ class DDMusicPlayVC: DDOnceBackWebVC {
         }
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         coordinator.animateAlongsideTransition(in: webView, animation: { (context ) in

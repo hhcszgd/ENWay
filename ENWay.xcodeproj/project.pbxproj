@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		150C65FE21BE0C5E0065BB12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 150C65FD21BE0C5D0065BB12 /* Assets.xcassets */; };
-		1515D6C621BE480A0074AB34 /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515D6C521BE48090074AB34 /* MusicPlayer.swift */; };
-		1515D6C821BE483F0074AB34 /* PlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515D6C721BE483F0074AB34 /* PlayVC.swift */; };
 		1515D6CB21BE49070074AB34 /* Music.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1515D6C921BE49060074AB34 /* Music.bundle */; };
 		1515D6CC21BE49070074AB34 /* Movie.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1515D6CA21BE49060074AB34 /* Movie.bundle */; };
 		1515D6CE21BE49710074AB34 /* DDAVPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515D6CD21BE49710074AB34 /* DDAVPlayer.swift */; };
 		1515D6D021BE57160074AB34 /* DDMusicPlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515D6CF21BE57160074AB34 /* DDMusicPlayVC.swift */; };
+		1517CA2921BF423F001220FC /* DDPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1517CA2821BF423F001220FC /* DDPlayerView.swift */; };
+		1517CA2B21BF4269001220FC /* VideoListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1517CA2A21BF4269001220FC /* VideoListVC.swift */; };
+		1517CA2D21BF4BF3001220FC /* DDVideoPlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1517CA2C21BF4BF3001220FC /* DDVideoPlayVC.swift */; };
+		1517CA2F21BF50BD001220FC /* DDVideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1517CA2E21BF50BD001220FC /* DDVideoPlayView.swift */; };
+		1517CA3121BF5321001220FC /* DDMediaPlayProtocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1517CA3021BF5321001220FC /* DDMediaPlayProtocal.swift */; };
 		15A1F1BB21BDF0F900AB9A0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1F1BA21BDF0F900AB9A0A /* AppDelegate.swift */; };
 		15A1F1BD21BDF0F900AB9A0A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1F1BC21BDF0F900AB9A0A /* ViewController.swift */; };
 		15A1F1C021BDF0F900AB9A0A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15A1F1BE21BDF0F900AB9A0A /* Main.storyboard */; };
@@ -127,12 +130,15 @@
 
 /* Begin PBXFileReference section */
 		150C65FD21BE0C5D0065BB12 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		1515D6C521BE48090074AB34 /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
-		1515D6C721BE483F0074AB34 /* PlayVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayVC.swift; sourceTree = "<group>"; };
 		1515D6C921BE49060074AB34 /* Music.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Music.bundle; sourceTree = "<group>"; };
 		1515D6CA21BE49060074AB34 /* Movie.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Movie.bundle; sourceTree = "<group>"; };
 		1515D6CD21BE49710074AB34 /* DDAVPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDAVPlayer.swift; sourceTree = "<group>"; };
 		1515D6CF21BE57160074AB34 /* DDMusicPlayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDMusicPlayVC.swift; sourceTree = "<group>"; };
+		1517CA2821BF423F001220FC /* DDPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DDPlayerView.swift; sourceTree = "<group>"; };
+		1517CA2A21BF4269001220FC /* VideoListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoListVC.swift; sourceTree = "<group>"; };
+		1517CA2C21BF4BF3001220FC /* DDVideoPlayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDVideoPlayVC.swift; sourceTree = "<group>"; };
+		1517CA2E21BF50BD001220FC /* DDVideoPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDVideoPlayView.swift; sourceTree = "<group>"; };
+		1517CA3021BF5321001220FC /* DDMediaPlayProtocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDMediaPlayProtocal.swift; sourceTree = "<group>"; };
 		15A1F1B721BDF0F900AB9A0A /* ENWay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ENWay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15A1F1BA21BDF0F900AB9A0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15A1F1BC21BDF0F900AB9A0A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -348,6 +354,7 @@
 			children = (
 				15A1F1E221BDF7EC00AB9A0A /* DDForceTouchProtocol.swift */,
 				15A1F1E321BDF7EC00AB9A0A /* DDShowProtocol.swift */,
+				1517CA3021BF5321001220FC /* DDMediaPlayProtocal.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -383,6 +390,7 @@
 		15A1F1F621BDF7EC00AB9A0A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1517CA2821BF423F001220FC /* DDPlayerView.swift */,
 				15A1F1F721BDF7EC00AB9A0A /* DDErrorView.swift */,
 				15A1F1F821BDF7EC00AB9A0A /* ImageBrowser */,
 				15A1F20121BDF7EC00AB9A0A /* DDNavigatBar.swift */,
@@ -400,6 +408,7 @@
 				15A1F20E21BDF7EC00AB9A0A /* GDMapInView.swift */,
 				15A1F20F21BDF7EC00AB9A0A /* MediaManager.swift */,
 				15A1F21021BDF7EC00AB9A0A /* GDAlertView.swift */,
+				1517CA2E21BF50BD001220FC /* DDVideoPlayView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -436,7 +445,6 @@
 		15A1F21121BDF7EC00AB9A0A /* tool */ = {
 			isa = PBXGroup;
 			children = (
-				1515D6C521BE48090074AB34 /* MusicPlayer.swift */,
 				1515D6CD21BE49710074AB34 /* DDAVPlayer.swift */,
 				15A1F21221BDF7EC00AB9A0A /* DDShowManager.swift */,
 				15A1F21321BDF7EC00AB9A0A /* DDPhotoManager.swift */,
@@ -483,6 +491,8 @@
 		15A1F27B21BDFCC100AB9A0A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				1517CA2A21BF4269001220FC /* VideoListVC.swift */,
+				1517CA2C21BF4BF3001220FC /* DDVideoPlayVC.swift */,
 				15A1F27C21BDFCC100AB9A0A /* DDItem2VC.swift */,
 				15A1F27D21BDFCC100AB9A0A /* DDItem2NavVC.swift */,
 			);
@@ -511,7 +521,6 @@
 		15A1F28221BDFCC100AB9A0A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				1515D6C721BE483F0074AB34 /* PlayVC.swift */,
 				15A1F28321BDFCC100AB9A0A /* DDItem1VC.swift */,
 				1515D6CF21BE57160074AB34 /* DDMusicPlayVC.swift */,
 				15A1F28421BDFCC100AB9A0A /* DDItem1NavVC.swift */,
@@ -763,7 +772,6 @@
 			files = (
 				15A1F24621BDF7EC00AB9A0A /* DDRootTabBarVC.swift in Sources */,
 				15A1F24321BDF7EC00AB9A0A /* DDBaseNavVC.swift in Sources */,
-				1515D6C821BE483F0074AB34 /* PlayVC.swift in Sources */,
 				15A1F24C21BDF7EC00AB9A0A /* GDLocation.swift in Sources */,
 				15A1F26421BDF7EC00AB9A0A /* DDShowManager.swift in Sources */,
 				15A1F28E21BDFCC100AB9A0A /* DDHuDongApiModel.swift in Sources */,
@@ -777,6 +785,7 @@
 				15A1F26721BDF7EC00AB9A0A /* DDAccount.swift in Sources */,
 				15A1F2B421BDFE2C00AB9A0A /* TestMoveItemVC.swift in Sources */,
 				15A1F29121BDFCC100AB9A0A /* DDItem1NavVC.swift in Sources */,
+				1517CA2F21BF50BD001220FC /* DDVideoPlayView.swift in Sources */,
 				15A1F24721BDF7EC00AB9A0A /* DDRootNavVC.swift in Sources */,
 				15A1F22A21BDF7EC00AB9A0A /* UINavigationController+extention.swift in Sources */,
 				15A1F22B21BDF7EC00AB9A0A /* VC+Extension.swift in Sources */,
@@ -787,11 +796,11 @@
 				15A1F24F21BDF7EC00AB9A0A /* DDTestScrollView.swift in Sources */,
 				15A1F27121BDF7EC00AB9A0A /* GDBaseControl.swift in Sources */,
 				15A1F22C21BDF7EC00AB9A0A /* UILabel+extension.swift in Sources */,
+				1517CA3121BF5321001220FC /* DDMediaPlayProtocal.swift in Sources */,
 				15A1F2B221BDFE2C00AB9A0A /* DDNewFeature.swift in Sources */,
 				15A1F2B021BDFE2C00AB9A0A /* DDSearchVC.swift in Sources */,
 				15A1F29421BDFCC100AB9A0A /* HomeReusableHeader.swift in Sources */,
 				15A1F2B321BDFE2C00AB9A0A /* TestMoveItem2VC.swift in Sources */,
-				1515D6C621BE480A0074AB34 /* MusicPlayer.swift in Sources */,
 				15A1F24E21BDF7EC00AB9A0A /* GDIBPhoto.swift in Sources */,
 				15A1F27921BDF7EC00AB9A0A /* DDRequestManager.swift in Sources */,
 				15A1F22F21BDF7EC00AB9A0A /* ScrollView_extension.swift in Sources */,
@@ -824,6 +833,7 @@
 				15A1F2BF21BDFE2C00AB9A0A /* GDMsgIconView.swift in Sources */,
 				15A1F25521BDF7EC00AB9A0A /* DDPageControl.swift in Sources */,
 				15A1F2BD21BDFE2C00AB9A0A /* DDSingleLayout.swift in Sources */,
+				1517CA2921BF423F001220FC /* DDPlayerView.swift in Sources */,
 				15A1F26921BDF7EC00AB9A0A /* pchx.swift in Sources */,
 				15A1F25E21BDF7EC00AB9A0A /* DDSearchBar.swift in Sources */,
 				15A1F24021BDF7EC00AB9A0A /* DDSpecialLabel.swift in Sources */,
@@ -831,6 +841,7 @@
 				15A1F29521BDFCC100AB9A0A /* DDTableViewCell.swift in Sources */,
 				15A1F23521BDF7EC00AB9A0A /* Calander_extension.swift in Sources */,
 				15A1F2BE21BDFE2C00AB9A0A /* ImgTxtView.swift in Sources */,
+				1517CA2D21BF4BF3001220FC /* DDVideoPlayVC.swift in Sources */,
 				15A1F22921BDF7EC00AB9A0A /* UIColor+Extension.swift in Sources */,
 				15A1F23221BDF7EC00AB9A0A /* UIVIew_extention.swift in Sources */,
 				15A1F25721BDF7EC00AB9A0A /* DDAlertController.swift in Sources */,
@@ -840,6 +851,7 @@
 				15A1F23921BDF7EC00AB9A0A /* AppDelegate+extension.swift in Sources */,
 				15A1F2B521BDFE2C00AB9A0A /* DDWelcomVC.swift in Sources */,
 				15A1F28F21BDFCC100AB9A0A /* DDMessageApiModel.swift in Sources */,
+				1517CA2B21BF4269001220FC /* VideoListVC.swift in Sources */,
 				15A1F29621BDFCC100AB9A0A /* HomeMessagesItem.swift in Sources */,
 				15A1F26121BDF7EC00AB9A0A /* GDMapInView.swift in Sources */,
 				15A1F27521BDF7EC00AB9A0A /* PCH.swift in Sources */,
