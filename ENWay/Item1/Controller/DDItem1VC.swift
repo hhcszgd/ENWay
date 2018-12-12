@@ -9,7 +9,8 @@
 import UIKit
 import CryptoSwift
 import CoreLocation
-
+let DDTitleColor1 = UIColor.brown
+let DDBackgroundColor1 = UIColor.green.withAlphaComponent(0.3)
 class MusicModel: NSObject , Codable {
     var name  = ""
     var urlStr = ""
@@ -148,6 +149,8 @@ extension DDItem1VC : UITableViewDelegate , UITableViewDataSource{
         tableView.delegate = self
         tableView.dataSource = self
         tableView.frame = self.view.bounds
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = DDBackgroundColor1
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -170,6 +173,9 @@ extension DDItem1VC : UITableViewDelegate , UITableViewDataSource{
         //        }
         
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return self.musicModels?.count ?? 0
@@ -184,6 +190,8 @@ extension DDItem1VC : UITableViewDelegate , UITableViewDataSource{
         //        cell.backgroundColor = UIColor.init(red:CGFloat (arc4random() % 256) / 256, green: CGFloat((arc4random() % 256) / 256), blue:CGFloat((arc4random() % 256) / 256), alpha: 1)
         
         cell.textLabel?.text = self.musicModels?[indexPath.row].name
+        cell.contentView.backgroundColor = DDBackgroundColor1
+        cell.textLabel?.textColor = DDTitleColor1
         return cell
     }
 }

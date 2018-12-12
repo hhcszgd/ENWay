@@ -31,12 +31,10 @@ class SettingVC: DDNormalVC {
         timeButton.addTarget(self , action: #selector(performCountNumber), for: UIControl.Event.touchUpInside)
     }
     @objc func performCountNumber()  {
-        
         if let timeInterval = Int(self.timeTextfield.text ?? "10") {
-            
             SettingManager.share.addTimer(timeInterval: timeInterval)
-            
         }
+        self.navigationController?.popViewController(animated: true )
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }

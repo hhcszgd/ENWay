@@ -40,7 +40,8 @@ protocol DDMediaPlayProtocal: NSObjectProtocol {
     /// common
     
     /// needn't implement
-    func play(mediaModel:MediaModel) -> DDMediaPlayResult 
+    @discardableResult
+    func play(mediaModel:MediaModel?) -> DDMediaPlayResult 
     /// needn't implement
     func pause()
     /// needn't implement
@@ -52,32 +53,63 @@ protocol DDMediaPlayProtocal: NSObjectProtocol {
     /// video
     
     /// audio
+    
+    /// call back
+    func almostPlayCallback(mediaModel:MediaModel)
+    func justPlayedCallback(mediaModel:MediaModel)
+    func nextCallback(mediaModel:MediaModel)
+    func pauseCallback(mediaModel:MediaModel)
+    func continueCallback(mediaModel:MediaModel)
+    func priviousCallback(mediaModel:MediaModel)
+    
+}
+// call back implement
+extension DDMediaPlayProtocal{
+    func almostPlayCallback(mediaModel:MediaModel){mylog("almostPlayCallback -> protocal")}
+    func justPlayedCallback(mediaModel:MediaModel){mylog("justPlayedCallback-> protocal")}
+    func nextCallback(mediaModel:MediaModel){mylog("nextCallback-> protocal")}
+    func pauseCallback(mediaModel:MediaModel){mylog("pauseCallback-> protocal")}
+    func continueCallback(mediaModel:MediaModel){mylog("continueCallback->  protocal")}
+    func priviousCallback(mediaModel:MediaModel){mylog("priviousCallback-> protocal")}
 }
 extension DDMediaPlayProtocal{
     @discardableResult
-    func play(mediaModel:MediaModel) -> DDMediaPlayResult {
+    func play(mediaModel:MediaModel? = nil ) -> DDMediaPlayResult {
+        
+        
+        var mediaModel  =  mediaModel
+        if mediaModel == nil  {
+            if self.mediaModels.count >= currentMediaIndex{
+                mediaModel = self.mediaModels[currentMediaIndex]
+            }else{
+                return DDMediaPlayResult.failue("no mediaModels")
+            }
+        }
+        
+        almostPlayCallback(mediaModel: mediaModel!)
         if let avurlAsset = self.player.currentItem?.asset as? AVURLAsset {
-            if let url = mediaModel.url?.absoluteString{
+            if let url = mediaModel?.url?.absoluteString{
                 if avurlAsset.url.absoluteString == url{
                     switch  self.player.timeControlStatus {
                     case .playing:
                         return DDMediaPlayResult.success("is playing")
                     case .paused:
                         self.player.play()
+                        self.continueCallback(mediaModel: mediaModel!)
                         return DDMediaPlayResult.success("success")
                     case .waitingToPlayAtSpecifiedRate:
-                        return judgePlay(mediaModel: mediaModel)
+                        return judgePlay(mediaModel: mediaModel!)
                         //                return DDMediaPlayResult.failue("loading")
                     }
                 }else{
-                    return judgePlay(mediaModel: mediaModel)
+                    return judgePlay(mediaModel: mediaModel!)
                 }
             }else{
                 return DDMediaPlayResult.failue("invalid url ")
             }
            
         }else{
-            return judgePlay(mediaModel: mediaModel)
+            return judgePlay(mediaModel: mediaModel!)
         }
     }
     @discardableResult
@@ -96,13 +128,18 @@ extension DDMediaPlayProtocal{
             self.currentMediaIndex = index
         }
         self.player.play()
-    
+        justPlayedCallback(mediaModel: mediaModel)
         return DDMediaPlayResult.success("success")
     
     }
     
     func pause() {
         self.player.pause()
+        if self.mediaModels.count >= currentMediaIndex{
+            pauseCallback(mediaModel: self.mediaModels[currentMediaIndex])
+        }else{
+            pauseCallback(mediaModel: MediaModel())
+        }
     }
     func next()
     {
@@ -115,7 +152,11 @@ extension DDMediaPlayProtocal{
         }
         if self.mediaModels.count >= currentMediaIndex{
             self.play(mediaModel: self.mediaModels[currentMediaIndex])
-        }else{currentMediaIndex = 0 }
+            nextCallback(mediaModel: self.mediaModels[currentMediaIndex])
+        }else{
+            currentMediaIndex = 0
+            nextCallback(mediaModel: MediaModel())
+        }
     }
     func privious()
     {
@@ -126,7 +167,11 @@ extension DDMediaPlayProtocal{
         }
         if self.mediaModels.count > currentMediaIndex{
             self.play(mediaModel: self.mediaModels[currentMediaIndex])
-        }else{currentMediaIndex = 0 }
+            priviousCallback(mediaModel: self.mediaModels[currentMediaIndex])
+        }else{
+            currentMediaIndex = 0
+            priviousCallback(mediaModel: MediaModel())
+        }
         mylog("dddddddddddddd")
     }
 }

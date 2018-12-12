@@ -22,7 +22,6 @@ class DDItem1NavVC: DDBaseNavVC {
         
         self.tabBarItem.image = UIImage(named:"workunselectediconsTabbar")
         self.tabBarItem.selectedImage = UIImage(named:"workselectediconTabbar")
-        DDAccount.share.refreshAccountInfo()
     }
     
     override func viewDidLoad() {

@@ -16,10 +16,10 @@ import AVKit
  }
  */
 class DDPlayerView: UIView , DDMediaPlayProtocal {
+    var justPlayedHandler : ((MediaModel) -> Void)?
+    
     var mediaType: DDMediaType = .video
-    
     var player: AVPlayer = AVPlayer.init(playerItem:nil)
-    
     var mediaModels: [MediaModel] = []
     override var canBecomeFirstResponder: Bool {return  true}
     internal var currentMediaIndex: Int = -9
@@ -48,7 +48,7 @@ class DDPlayerView: UIView , DDMediaPlayProtocal {
         super.layoutSubviews()
         self.playerLayer?.frame = self.bounds
         self.imageView.frame = self.bounds
-        bottomBar.frame = CGRect(x: 0, y: self.bounds.height - 40, width: self.bounds.width, height: 40)
+//        bottomBar.frame = CGRect(x: 0, y: self.bounds.height - 40, width: self.bounds.width, height: 40)
         indicatorView.center = CGPoint(x: self.bounds.width/2, y: self.bounds.height/2)
         if let size = playerLayer?.player?.currentItem?.presentationSize , size != CGSize.zero{
             var realH = self.bounds.width * size.height / size.width
@@ -79,10 +79,19 @@ class DDPlayerView: UIView , DDMediaPlayProtocal {
         self.play(mediaModel: mediaModel)
         
         self.configPlayer()
-        self.addPlayerObserver()
         
     }
-    
+    /// play call back
+    func justPlayedCallback(mediaModel: MediaModel) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+            self.addPlayerObserver()
+        }
+        self.justPlayedHandler?(mediaModel)
+    }
+    func nextCallback(mediaModel: MediaModel) {
+        layoutIfNeeded()
+        setNeedsLayout()
+    }
     func setPlaceholderImage(imgUrlStr : String?) {
         self.imageView.image = nil
         self.imageView.setImageUrl(url: imgUrlStr)
@@ -141,108 +150,18 @@ class DDPlayerView: UIView , DDMediaPlayProtocal {
     }
     
     func removePlayerObserver() {//在更新item的地方移除通知再添加
-        
-        playerLayer?.player?.currentItem?.removeObserver(self , forKeyPath: "status")
-        if #available(iOS 10.0, *) {
-            playerLayer?.player?.removeObserver(self , forKeyPath: "timeControlStatus")
-        }else{
-            playerLayer?.player?.removeObserver(self , forKeyPath: "rate")
-            playerLayer?.player?.currentItem?.removeObserver(self , forKeyPath: "playbackBufferEmpty")
-            playerLayer?.player?.currentItem?.removeObserver(self , forKeyPath: "playbackLikelyToKeepUp")
-        }
+        playerLayer?.player?.removeObserver(self , forKeyPath: "timeControlStatus")
     }
     func addPlayerObserver()  {
-        needRemoveObserver = true 
-        playerLayer?.player?.currentItem?.addObserver(self , forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil )
-        //        playerLayer?.player?.addObserver(self , forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil )
-        
-        if #available(iOS 10.0, *) {
-            playerLayer?.player?.addObserver(self , forKeyPath: "timeControlStatus", options: NSKeyValueObservingOptions.new, context: nil )
-            }else{
-            
-            playerLayer?.player?.addObserver(self , forKeyPath: "rate", options: NSKeyValueObservingOptions.new, context: nil )
-            
-            playerLayer?.player?.currentItem?.addObserver(self , forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil )//缓冲中
-            playerLayer?.player?.currentItem?.addObserver(self , forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil )//缓冲完毕
-            
-        }
-        
+        needRemoveObserver = true
+        playerLayer?.player?.addObserver(self , forKeyPath: "timeControlStatus", options: NSKeyValueObservingOptions.new, context: nil )
     }
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath ?? "" == "status"{
-            if let statusRewValue = change?[NSKeyValueChangeKey.newKey] as? Int{
-                if let status  = AVPlayerItem.Status.init(rawValue: statusRewValue){
-                    switch status{
-                    case .failed:
-                        print("失败")
-                        break
-                    case .readyToPlay:
-                        print("准备播放")
-                        if !self.imageView.isHidden {self.imageView.isHidden = true}
-                        isBuffering = false
-                        indicatorView.stopAnimating()
-                        self.bottomBar.isHidden = false
-                        if let duration = self.playerLayer?.player?.currentItem?.duration {
-                            let seconds = duration.seconds
-                            currentItemTotalTime = seconds
-                            bottomBar.configSlider(minimumValue: 0.0, maximumValue: Float(seconds))
-                        }else {
-                            bottomBar.configSlider(minimumValue: 0.0, maximumValue: 0.0)
-                        }
-                        let value = Float((self.playerLayer?.player?.currentItem?.currentTime() ?? CMTime.zero).seconds)
-                        self.bottomBar.configSliderValue(value:value)
-                        self.bringSubviewToFront(bottomBar)
-                        layoutIfNeeded()
-                        setNeedsLayout()
-                        break
-                    case .unknown:
-                        print("未知")
-                        break
-                    }
-                }
-            }
-        }else if keyPath ?? "" == "timeControlStatus"{
+        if keyPath ?? "" == "timeControlStatus"{
             if let statusRewValue = change?[NSKeyValueChangeKey.newKey] as? Int{
                 configControlBar(statusRewValue:statusRewValue)
             }
-        }else if keyPath ?? "" == "rate"{
-            print("--->\(#line) ::: \(self.playerLayer?.player?.rate)")
-            if self.playerLayer?.player?.rate ?? 0 == 0.0 {//暂停
-                if let currentTime =  self.playerLayer?.player?.currentItem?.currentTime() {
-                    if Int(currentItemTotalTime) == Int(currentTime.seconds) && currentItemTotalTime != 0{//播放完毕
-                        ///重置界面到初始状态
-                        self.bottomBar.configUIWhenPlayEnd()
-                        self.playerLayer?.player?.currentItem?.seek(to: CMTime.zero, completionHandler: nil )
-                        currentItemTotalTime = 0
-                    }else{//暂停
-                        self.bottomBar.configUIWhenPause()
-                    }
-                }
-            }else if self.playerLayer?.player?.rate ?? 0 == 1.0 {//播放
-                self.bottomBar.configUIWhenPlaying()
-                if !self.imageView.isHidden {self.imageView.isHidden = true}
-                indicatorView.stopAnimating()
-            }
-        }else if keyPath ?? "" == "playbackBufferEmpty"{
-            print("--->\(#line) ::: stop ?")
-            isBuffering = true
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-                if self.isBuffering{//执行转圈, 更新播放按钮
-                    self.indicatorView.startAnimating()
-                    self.bringSubviewToFront(self.indicatorView)
-                }
-            }
-        }else if keyPath ?? "" == "playbackLikelyToKeepUp"{
-            print("--->\(#line) ::: continue ?")
-            if !self.imageView.isHidden {self.imageView.isHidden = true}
-            isBuffering = false
-            self.indicatorView.stopAnimating()
-            if let duration = self.playerLayer?.player?.currentItem?.duration {
-                let seconds = duration.seconds
-                currentItemTotalTime = seconds
-            }
         } else{super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)}
-        
     }
     func destroy()  {
         self.removePlayerObserver()
@@ -256,7 +175,7 @@ class DDPlayerView: UIView , DDMediaPlayProtocal {
             if let status  = AVPlayer.TimeControlStatus.init(rawValue: statusRewValue ?? 0){
                 switch status{
                 case .paused:
-                    print("暂停")//更新播放按钮
+                    mylog("暂停")//更新播放按钮
                     if let currentTime =  self.playerLayer?.player?.currentItem?.currentTime() {
                         if currentItemTotalTime - currentTime.seconds < 1 && currentItemTotalTime != 0{//播放完毕
                             ///重置界面到初始状态
@@ -269,17 +188,30 @@ class DDPlayerView: UIView , DDMediaPlayProtocal {
                         }
                     }
                 case .playing:
-                    print("播放中")//取消转圈并播放,更新播放按钮
+                    mylog("播放中")//取消转圈并播放,更新播放按钮
                     if !self.imageView.isHidden {self.imageView.isHidden = true}
                     self.bottomBar.configUIWhenPlaying()
+                    indicatorView.stopAnimating()
+                    isBuffering = false
+                    self.bottomBar.isHidden = false
                     if let duration = self.playerLayer?.player?.currentItem?.duration {
                         let seconds = duration.seconds
                         currentItemTotalTime = seconds
+                        let maxinumvalue = Float(seconds)
+                        
+                        bottomBar.configSlider(minimumValue: 0.0, maximumValue: maxinumvalue.isNaN ? 0.0 : maxinumvalue)
+                    }else {
+                        bottomBar.configSlider(minimumValue: 0.0, maximumValue: 0.0)
                     }
-                    indicatorView.stopAnimating()
+                    let value = Float((self.playerLayer?.player?.currentItem?.currentTime() ?? CMTime.zero).seconds)
+                    self.bottomBar.configSliderValue(value:value)
+                    self.bringSubviewToFront(bottomBar)
+                    layoutIfNeeded()
+                    setNeedsLayout()
+                    
                     break
                 case .waitingToPlayAtSpecifiedRate:
-                    print("等待 到特定的比率去播放")//
+                    mylog("等待 到特定的比率去播放")//
                     self.bottomBar.configUIWhenPause()
                     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                         if #available(iOS 10.0, *) {
@@ -328,6 +260,21 @@ class DDPlayerView: UIView , DDMediaPlayProtocal {
             playerLayer?.player?.addPeriodicTimeObserver(forInterval: interval, queue: mainQueue) {
                 [weak self] time in
                 // update player transport UI
+                if let duration = self?.playerLayer?.player?.currentItem?.duration {
+                    let seconds = duration.seconds
+                    self?.currentItemTotalTime = seconds
+                    let maxinumvalue = Float(seconds)
+                    
+                    self?.bottomBar.configSlider(minimumValue: 0.0, maximumValue: maxinumvalue.isNaN ? 0.0 : maxinumvalue)
+                }else {
+                    self?.bottomBar.configSlider(minimumValue: 0.0, maximumValue: 0.0)
+                }
+                
+                
+                
+                
+                
+                
                 print("\(#line)")
                 if let isAnimating = self?.indicatorView.isAnimating , isAnimating  {self?.indicatorView.stopAnimating()}
                 let value = Float((self?.playerLayer?.player?.currentItem?.currentTime() ?? CMTime.zero).seconds)
@@ -380,7 +327,7 @@ extension DDPlayerView : DDPlayerControlDelegate{
     }
     
     func pressToPlay() {
-        self.playerLayer?.player?.play()
+        self.play( )
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             if self.playerLayer?.player?.rate == 0.0{                
                 self.indicatorView.startAnimating()
@@ -389,7 +336,7 @@ extension DDPlayerView : DDPlayerControlDelegate{
     }
     
     func pressToPause() {
-        self.playerLayer?.player?.pause()
+        self.pause()
     }
     
     
@@ -565,6 +512,7 @@ class DDPlayerControlBar: UIView {
         slider.maximumValue = maximumValue
     }
     func configSliderValue(value : Float){
+        let value = value.isNaN ? 0 : value
         slider.value = value
         let hasPlayHours = Int(value) / 3600
         let hasPlayHoursString = String(format: "%02d", hasPlayHours)
@@ -633,11 +581,11 @@ class DDPlayerControlBar: UIView {
         sender.isSelected = !sender.isSelected
         performDelayHidden()
         if sender.isSelected{//
-            self.style = .fullScreen
+//            self.style = .fullScreen
             self.delegate?.screenChanged(isFullScreen: true )
             rootNaviVC?.setNeedsStatusBarAppearanceUpdate()
         }else{//小屏
-            self.style = .smallScreen
+//            self.style = .smallScreen
             self.delegate?.screenChanged(isFullScreen: false  )
         }
     }

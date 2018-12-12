@@ -19,12 +19,16 @@ class DDVideoPlayVC: DDNormalVC {
         let playView : DDPlayerView =  DDPlayerView.init(frame: CGRect.zero, mediaModel: movieModel , mediaModels: movieModels)
 //        playView.mediaModels = movieModels
         playView.backgroundColor = UIColor.green
+        playView.justPlayedHandler = {[weak self] mediamodel in
+            self?.title = mediamodel.name
+        }
         return playView
     }()
     var selectedModel : MusicModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(playView)
+        self.title = movieModel.name
 //        if playView.mediaModels != self.movieModels{
 //            playView.mediaModels = self.movieModels
 //        }
@@ -34,7 +38,6 @@ class DDVideoPlayVC: DDNormalVC {
             make.left.right.bottom.equalTo(self.view)
             mylog("2 -> \(size)")
         }
-        self.title = "视频bofang"
         self.addNotificationObserver()
         
     }

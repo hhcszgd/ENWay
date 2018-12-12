@@ -118,8 +118,8 @@ class DDAccount: Codable{
             let object =  NSKeyedUnarchiver.unarchiveObject(withFile:  filePath)
             
             ///new method
-            let DDDD = try? Data(contentsOf: URL(fileURLWithPath: filePath))
-            _ = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [String.self as! AnyObject.Type], from: Data())
+//            let DDDD = try? Data(contentsOf: URL(fileURLWithPath: filePath))
+//            _ = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [String.self as! AnyObject.Type], from: Data())
             ///new method
             
             if let realObjc = object as? DDAccount {

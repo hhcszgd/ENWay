@@ -35,7 +35,7 @@ class VideoListVC: DDNormalVC {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        
+        tableView.backgroundColor = DDBackgroundColor1
         
         self.tableView.snp.remakeConstraints { (make ) in
             let h = (self.navigationController?.navigationBar.height ?? 0) + UIApplication.shared.statusBarFrame.height
@@ -128,7 +128,7 @@ extension VideoListVC : UITableViewDelegate , UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 64
+        return 50
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.movieModels?.count ?? 0
@@ -138,12 +138,14 @@ extension VideoListVC : UITableViewDelegate , UITableViewDataSource {
         let model = self.movieModels?[indexPath.row]
         if let cell = tableView.dequeueReusableCell(withIdentifier: "DDPeixunCell") as? DDPeixunCell{
             cell.textLabel?.text = model?.name
-            //            cell.keyWorld = self.searchBox.text
+            cell.contentView.backgroundColor = DDBackgroundColor1
+            cell.textLabel?.textColor = DDTitleColor1
             return cell
         }else{
             
             let cell = DDPeixunCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: "DDPeixunCell")
-            //            cell.keyWorld = self.searchBox.text
+            cell.contentView.backgroundColor = DDBackgroundColor1
+            cell.textLabel?.textColor = DDTitleColor1
             cell.textLabel?.text = model?.name
             return cell
         }
