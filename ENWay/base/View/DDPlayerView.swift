@@ -50,16 +50,23 @@ class DDPlayerView: UIView , DDMediaPlayProtocal {
         self.imageView.frame = self.bounds
 //        bottomBar.frame = CGRect(x: 0, y: self.bounds.height - 40, width: self.bounds.width, height: 40)
         indicatorView.center = CGPoint(x: self.bounds.width/2, y: self.bounds.height/2)
+        layoutBottomBar()
+        self.superview?.bringSubviewToFront(self)
+    }
+    func layoutBottomBar() {
         if let size = playerLayer?.player?.currentItem?.presentationSize , size != CGSize.zero{
             var realH = self.bounds.width * size.height / size.width
             if realH > self.bounds.height {//以宽为标准
                 realH = self.bounds.height
             }
-            self.bottomBar.frame = CGRect(x: 0, y: self.bounds.height / 2 + realH / 2 - 40, width: self.bounds.width, height: 40)
+            let targetFrame =  CGRect(x: 0, y: self.bounds.height / 2 + realH / 2 - 40, width: self.bounds.width, height: 40)
+            if targetFrame != self.bottomBar.frame{
+                self.bottomBar.frame = targetFrame
+            }
             self.bringSubviewToFront(self.bottomBar)
             self.bringSubviewToFront(imageView)
         }
-        self.superview?.bringSubviewToFront(self)
+        
     }
     init(frame: CGRect , mediaModel: MediaModel ,mediaModels: [MediaModel]) {
         super.init(frame: frame)
@@ -274,10 +281,12 @@ class DDPlayerView: UIView , DDMediaPlayProtocal {
                 
                 
                 
-                
                 print("\(#line)")
                 if let isAnimating = self?.indicatorView.isAnimating , isAnimating  {self?.indicatorView.stopAnimating()}
                 let value = Float((self?.playerLayer?.player?.currentItem?.currentTime() ?? CMTime.zero).seconds)
+                if !value.isNaN , value < 2 {
+                    self?.layoutBottomBar()
+                }
                 self?.bottomBar.configSliderValue(value:value)
                 
         }
