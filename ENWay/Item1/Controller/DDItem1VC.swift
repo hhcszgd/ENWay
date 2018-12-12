@@ -61,7 +61,7 @@ class DDItem1VC: DDNormalVC {
         
     }
     @objc func setting(sender:UIButton) {
-//        self.navigationController?.pushViewController(SettingVC(), animated: true)
+        self.navigationController?.pushViewController(SettingVC(), animated: true)
     }
     /*
      // MARK: - Navigation

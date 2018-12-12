@@ -17,6 +17,8 @@
 		1517CA2D21BF4BF3001220FC /* DDVideoPlayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1517CA2C21BF4BF3001220FC /* DDVideoPlayVC.swift */; };
 		1517CA2F21BF50BD001220FC /* DDVideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1517CA2E21BF50BD001220FC /* DDVideoPlayView.swift */; };
 		1517CA3121BF5321001220FC /* DDMediaPlayProtocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1517CA3021BF5321001220FC /* DDMediaPlayProtocal.swift */; };
+		159BFB7121C0998A005E7DCF /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BFB6F21C0998A005E7DCF /* SettingManager.swift */; };
+		159BFB7221C0998A005E7DCF /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 159BFB7021C0998A005E7DCF /* SettingVC.swift */; };
 		15A1F1BB21BDF0F900AB9A0A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1F1BA21BDF0F900AB9A0A /* AppDelegate.swift */; };
 		15A1F1BD21BDF0F900AB9A0A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A1F1BC21BDF0F900AB9A0A /* ViewController.swift */; };
 		15A1F1C021BDF0F900AB9A0A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15A1F1BE21BDF0F900AB9A0A /* Main.storyboard */; };
@@ -139,6 +141,8 @@
 		1517CA2C21BF4BF3001220FC /* DDVideoPlayVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDVideoPlayVC.swift; sourceTree = "<group>"; };
 		1517CA2E21BF50BD001220FC /* DDVideoPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDVideoPlayView.swift; sourceTree = "<group>"; };
 		1517CA3021BF5321001220FC /* DDMediaPlayProtocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDMediaPlayProtocal.swift; sourceTree = "<group>"; };
+		159BFB6F21C0998A005E7DCF /* SettingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingManager.swift; sourceTree = "<group>"; };
+		159BFB7021C0998A005E7DCF /* SettingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		15A1F1B721BDF0F900AB9A0A /* ENWay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ENWay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15A1F1BA21BDF0F900AB9A0A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		15A1F1BC21BDF0F900AB9A0A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -266,6 +270,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		159BFB6E21C0998A005E7DCF /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				159BFB6F21C0998A005E7DCF /* SettingManager.swift */,
+				159BFB7021C0998A005E7DCF /* SettingVC.swift */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
 		15A1F1AE21BDF0F900AB9A0A = {
 			isa = PBXGroup;
 			children = (
@@ -521,6 +534,7 @@
 		15A1F28221BDFCC100AB9A0A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				159BFB6E21C0998A005E7DCF /* Setting */,
 				15A1F28321BDFCC100AB9A0A /* DDItem1VC.swift */,
 				1515D6CF21BE57160074AB34 /* DDMusicPlayVC.swift */,
 				15A1F28421BDFCC100AB9A0A /* DDItem1NavVC.swift */,
@@ -778,6 +792,7 @@
 				15A1F26321BDF7EC00AB9A0A /* GDAlertView.swift in Sources */,
 				15A1F27821BDF7EC00AB9A0A /* DDLocationManager.swift in Sources */,
 				15A1F26221BDF7EC00AB9A0A /* MediaManager.swift in Sources */,
+				159BFB7121C0998A005E7DCF /* SettingManager.swift in Sources */,
 				15A1F25221BDF7EC00AB9A0A /* GDIBCollectionView.swift in Sources */,
 				15A1F25D21BDF7EC00AB9A0A /* DDAlertOrSheet.swift in Sources */,
 				15A1F25621BDF7EC00AB9A0A /* DDRowView.swift in Sources */,
@@ -861,6 +876,7 @@
 				15A1F23821BDF7EC00AB9A0A /* CGFloat+Extension.swift in Sources */,
 				15A1F2B621BDFE2C00AB9A0A /* QRCodeScannerVC.swift in Sources */,
 				15A1F25821BDF7EC00AB9A0A /* DDImagePicker.swift in Sources */,
+				159BFB7221C0998A005E7DCF /* SettingVC.swift in Sources */,
 				15A1F25C21BDF7EC00AB9A0A /* SystemMediaPicker.swift in Sources */,
 				15A1F24A21BDF7EC00AB9A0A /* DDShowModel.swift in Sources */,
 				15A1F23721BDF7EC00AB9A0A /* GDBaseControl+extension.swift in Sources */,

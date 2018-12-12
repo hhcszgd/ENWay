@@ -116,6 +116,12 @@ class DDAccount: Codable{
         if let realDocuPath : NSString = docuPath as NSString? {
             let filePath = realDocuPath.appendingPathComponent("Account.data")
             let object =  NSKeyedUnarchiver.unarchiveObject(withFile:  filePath)
+            
+            ///new method
+            let DDDD = try? Data(contentsOf: URL(fileURLWithPath: filePath))
+            _ = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [String.self as! AnyObject.Type], from: Data())
+            ///new method
+            
             if let realObjc = object as? DDAccount {
                 return realObjc
             }else{
