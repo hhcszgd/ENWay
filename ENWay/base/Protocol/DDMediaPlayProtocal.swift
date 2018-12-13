@@ -70,6 +70,7 @@ protocol DDMediaPlayProtocal: NSObjectProtocol {
     func continueCallback(mediaModel:MediaModel)
     func priviousCallback(mediaModel:MediaModel)
     func endPlayCallback(mediaModel:MediaModel)
+    func updateTimeWhilePlayingCallback(currentItme : CMTime , player:DDMediaPlayProtocal)
 }
 // call back implement
 extension DDMediaPlayProtocal{
@@ -80,6 +81,7 @@ extension DDMediaPlayProtocal{
     func continueCallback(mediaModel:MediaModel){mylog("continueCallback->  protocal")}
     func priviousCallback(mediaModel:MediaModel){mylog("priviousCallback-> protocal")}
     func endPlayCallback(mediaModel:MediaModel){mylog("endPlayCallback -> protocal")}
+    func updateTimeWhilePlayingCallback(currentItme : CMTime , player:DDMediaPlayProtocal){mylog("updateTimeWhilePlayingCallback -> protocal")}
 }
 /// play control method
 extension DDMediaPlayProtocal{
@@ -328,5 +330,21 @@ extension DDMediaPlayProtocal{
 //            mylog("jump time \(notification)")
 //
 //        }
+        self.addPeriodicTimeObserver()
+    }
+    
+    func addPeriodicTimeObserver() {
+        // Invoke callback every 1 second
+        let interval = CMTime(seconds: 1,
+                              preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        // Queue on which to invoke the callback
+        let mainQueue = DispatchQueue.main
+        // Add time observer
+        _ =
+            player.addPeriodicTimeObserver(forInterval: interval, queue: mainQueue) {
+                [weak self] time in
+                // update player transport UI
+                self?.updateTimeWhilePlayingCallback(currentItme: time  , player: self!)
+        }
     }
 }
