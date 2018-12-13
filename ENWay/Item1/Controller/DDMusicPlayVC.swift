@@ -7,6 +7,7 @@
 //
 import UIKit
 import SnapKit
+import AVKit
 class DDMusicPlayVC1: DDOnceBackWebVC {
     
     var currentMediaModel : MediaModel?
@@ -17,6 +18,7 @@ class DDMusicPlayVC1: DDOnceBackWebVC {
         if let model  = self.currentMediaModel{
             DDAVPlayer1.share.play(mediaModel: model)
         }
+        
         //        self.view.backgroundColor = UIColor.orange
         let lastPathComponent = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.lastPathComponent ?? "name"
         let pathExtension = self.currentMediaModel?.url?.pathExtension ?? "extexsion"
@@ -56,7 +58,8 @@ class DDMusicPlayVC1: DDOnceBackWebVC {
         }
     }
     @objc func testReloadPdf() {
-        DDAVPlayer1.share.audioPlayerDidFinishPlaying( successfully: true)
+        DDAVPlayer1.share.next()
+        self.loadPdf()
     }
     @objc func loadPdf() {
         mylog("重载")

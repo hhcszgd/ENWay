@@ -21,7 +21,15 @@ class MediaModel: NSObject , Codable {
     var name  = ""
 //    var urlStr = ""
     var size = ""
-    var url : URL?
+    var url : URL?{
+        didSet{
+            if let url = url {
+                name = url.lastPathComponent + ".\(url.pathExtension)"
+            }else{
+                name = "unknownName"
+            }
+        }
+    }
     var mediaType : DDMediaType = .sound
 }
 protocol DDMediaPlayProtocal: NSObjectProtocol {
@@ -61,7 +69,7 @@ protocol DDMediaPlayProtocal: NSObjectProtocol {
     func pauseCallback(mediaModel:MediaModel)
     func continueCallback(mediaModel:MediaModel)
     func priviousCallback(mediaModel:MediaModel)
-    
+    func endPlayCallback(mediaModel:MediaModel)
 }
 // call back implement
 extension DDMediaPlayProtocal{
@@ -71,7 +79,9 @@ extension DDMediaPlayProtocal{
     func pauseCallback(mediaModel:MediaModel){mylog("pauseCallback-> protocal")}
     func continueCallback(mediaModel:MediaModel){mylog("continueCallback->  protocal")}
     func priviousCallback(mediaModel:MediaModel){mylog("priviousCallback-> protocal")}
+    func endPlayCallback(mediaModel:MediaModel){mylog("endPlayCallback -> protocal")}
 }
+/// play control method
 extension DDMediaPlayProtocal{
     @discardableResult
     func play(mediaModel:MediaModel? = nil ) -> DDMediaPlayResult {
@@ -285,5 +295,38 @@ extension DDMediaPlayProtocal{
         }
         
         
+    }
+}
+// play deledate
+extension DDMediaPlayProtocal{
+    // you should invok this method in init method  if you want to know when play end
+    func addNotification() {
+//        NotificationCenter.default.addObserver(self , selector: #selector(playEnd(notifi:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil )
+        
+        NotificationCenter.default.addObserver(forName:
+        NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil  , queue: OperationQueue.current) {[weak self ] (notification) in
+            if let ssss = self{
+                var mo = MediaModel()
+                if ssss.mediaModels.count > ssss.currentMediaIndex{
+                    if let playerItem = notification.object as? AVPlayerItem , let urlAsset = playerItem.asset as? AVURLAsset {
+                        if urlAsset.url.absoluteString == ssss.mediaModels[ssss.currentMediaIndex].url?.absoluteString ?? ""{
+                            mo = ssss.mediaModels[ssss.currentMediaIndex]
+                        }else{
+                            mo.url = urlAsset.url
+                        }
+                    }
+                }else{
+                    if let playerItem = notification.object as? AVPlayerItem , let urlAsset = playerItem.asset as? AVURLAsset {
+                        mo.url = urlAsset.url
+                    }
+                }
+                ssss.endPlayCallback(mediaModel: mo)
+            }
+        }
+//        NotificationCenter.default.addObserver(forName:
+//        NSNotification.Name.AVPlayerItemTimeJumped, object: nil  , queue: OperationQueue.current) {[weak self ] (notification) in
+//            mylog("jump time \(notification)")
+//
+//        }
     }
 }
