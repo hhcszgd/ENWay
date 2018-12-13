@@ -44,12 +44,21 @@ class DDAVPlayer1: NSObject , DDMediaPlayProtocal{
         self.addNotification()
     }
     func endPlayCallback(mediaModel: MediaModel) {
-        self.next()
-        NotificationCenter.default.post(name:  Notification.Name("ReloadPdfNotification"), object: self)
+            self.next()
+            NotificationCenter.default.post(name:  Notification.Name("ReloadPdfNotification"), object: self)
     }
     
 }
-
+extension DDAVPlayer1{
+    func removePlayerObserver() {//在更新item的地方移除通知再添加
+        self.player.removeObserver(self , forKeyPath: "timeControlStatus")
+    }
+    func addPlayerObserver()  {
+        self.player.addObserver(self , forKeyPath: "timeControlStatus", options: NSKeyValueObservingOptions.new, context: nil )
+    }
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    }
+}
 /* change play time
 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
     DDAVPlayer1.share.player.seek(to: CMTime(seconds: 300, preferredTimescale: CMTimeScale(1))) { (bb) in
@@ -57,3 +66,6 @@ DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
     }
 }
 */
+class DDMediaPlayManager: NSObject {
+    
+}

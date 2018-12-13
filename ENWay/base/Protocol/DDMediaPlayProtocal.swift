@@ -106,8 +106,22 @@ extension DDMediaPlayProtocal{
                     case .playing:
                         return DDMediaPlayResult.success("is playing")
                     case .paused:
-                        self.player.play()
-                        self.continueCallback(mediaModel: mediaModel!)
+                        mylog(self.player.currentItem?.duration.seconds)
+                        mylog(self.player.currentItem?.currentTime().seconds)
+                        if let duration = self.player.currentItem?.duration.seconds , let currentTime = self.player.currentItem?.currentTime().seconds , duration == currentTime{//当前播完 , 且在起点
+                            if let url = mediaModel?.url{
+                                self.player.replaceCurrentItem(with: AVPlayerItem(url: url))
+                                self.player.play()
+                            }else{
+                                return DDMediaPlayResult.failue("valid url")
+                            }
+                        }else {// 正在播
+                            self.player.play()
+                            self.continueCallback(mediaModel: mediaModel!)
+                        }
+                        
+                        
+                        
                         return DDMediaPlayResult.success("success")
                     case .waitingToPlayAtSpecifiedRate:
                         return judgePlay(mediaModel: mediaModel!)
@@ -309,8 +323,10 @@ extension DDMediaPlayProtocal{
         NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil  , queue: OperationQueue.current) {[weak self ] (notification) in
             if let ssss = self{
                 var mo = MediaModel()
-                if ssss.mediaModels.count > ssss.currentMediaIndex{
+                if ssss.mediaModels.count > ssss.currentMediaIndex && ssss.currentMediaIndex >= 0{
                     if let playerItem = notification.object as? AVPlayerItem , let urlAsset = playerItem.asset as? AVURLAsset {
+                        mylog(ssss.mediaModels.count)
+                        mylog(ssss.currentMediaIndex)
                         if urlAsset.url.absoluteString == ssss.mediaModels[ssss.currentMediaIndex].url?.absoluteString ?? ""{
                             mo = ssss.mediaModels[ssss.currentMediaIndex]
                         }else{
@@ -322,7 +338,11 @@ extension DDMediaPlayProtocal{
                         mo.url = urlAsset.url
                     }
                 }
-                ssss.endPlayCallback(mediaModel: mo)
+                
+                if ssss.mediaModels.contains(mo){
+                    ssss.endPlayCallback(mediaModel: mo)
+                }
+                
             }
         }
 //        NotificationCenter.default.addObserver(forName:
@@ -333,7 +353,7 @@ extension DDMediaPlayProtocal{
         self.addPeriodicTimeObserver()
     }
     
-    func addPeriodicTimeObserver() {
+    private func addPeriodicTimeObserver() {
         // Invoke callback every 1 second
         let interval = CMTime(seconds: 1,
                               preferredTimescale: CMTimeScale(NSEC_PER_SEC))
@@ -347,4 +367,34 @@ extension DDMediaPlayProtocal{
                 self?.updateTimeWhilePlayingCallback(currentItme: time  , player: self!)
         }
     }
+    
+    
+    private func addBoundaryTimeObserver() {
+        
+        let assetDuration = player.currentItem?.duration ?? CMTime.zero
+        var times = [NSValue]()
+        // Set initial time to zero
+        var currentTime = CMTime.zero
+        // Divide the asset's duration into quarters.
+        let interval = CMTimeMultiplyByFloat64(assetDuration, multiplier: 0.25)
+        
+        // Build boundary times at 25%, 50%, 75%, 100%/// 下面的block 分别d在 25%, 50%, 75%, 100% 的地方调用一次
+        while currentTime < assetDuration {
+            currentTime = currentTime + interval
+            times.append(NSValue(time:currentTime))
+        }
+        // Queue on which to invoke the callback
+        let mainQueue = DispatchQueue.main
+        // Add time observer
+        ///
+        let _ =
+            player.addBoundaryTimeObserver(forTimes: times, queue: mainQueue) {
+                [weak self]  in
+                // Update UI
+                mylog("\(#line)")
+        }
+    }
+//    func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+//    }
+    
 }
