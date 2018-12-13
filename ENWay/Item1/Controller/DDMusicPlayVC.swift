@@ -53,9 +53,7 @@ class DDMusicPlayVC1: DDOnceBackWebVC {
         DDAVPlayer1.share.pause()
     }
     func performPlay() {
-        if let model  = self.currentMediaModel{
-            DDAVPlayer1.share.play(mediaModel :model)
-        }
+            DDAVPlayer1.share.play()
     }
     @objc func testReloadPdf() {
         DDAVPlayer1.share.next()
