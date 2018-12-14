@@ -29,7 +29,7 @@ class MediaModel: NSObject , Codable {
                 documentsURL.appendPathComponent(name)
                 self.fileURLStr = documentsURL.path
             }else{
-                if let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed ) ?? ""){
+                if let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed ) ?? ""){
                     name = url.lastPathComponent
                     var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                     documentsURL.appendPathComponent(name)
@@ -50,7 +50,7 @@ class MediaModel: NSObject , Codable {
             if let url = URL(string: fileURLStr){
                 name = url.lastPathComponent
             }else{
-                if let url = URL(string: fileURLStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed ) ?? ""){
+                if let url = URL(string: fileURLStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed ) ?? ""){
                     name = url.lastPathComponent
                 }else{
                     name = "unknownName"
@@ -188,9 +188,12 @@ extension DDMediaPlayProtocal{
             guard let tempurl = URL(string: mediaModel.fileURLStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "")  else {
                 return DDMediaPlayResult.failue("invalid url")
             }
+
             url = tempurl
         }
-        
+        mylog(mediaModel.fileURLStr.replace(keyWord: " ", to: "%20"))
+        mylog(mediaModel.fileURLStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "")
+        mylog(mediaModel.fileURLStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed) ?? "")
 
         let avplayitem = AVPlayerItem(url: url)
         self.player.replaceCurrentItem(with: avplayitem)
@@ -400,7 +403,12 @@ extension DDMediaPlayProtocal{
 //        }
         self.addPeriodicTimeObserver()
     }
-    
+    func error() {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemNewErrorLogEntry, object: nil , queue: OperationQueue.current) { (notifi) in
+            mylog(notifi)
+            mylog(self.player.error)
+        }
+    }
     private func addPeriodicTimeObserver() {
         // Invoke callback every 1 second
         let interval = CMTime(seconds: 1,

@@ -247,7 +247,7 @@ class DDRequestManager: NSObject {
   
     
     
-    func downFile(mediaModel : MediaModel  , complate:@escaping (String?) -> Void) {
+    func downFile(mediaModel : MediaModel  , complate:@escaping (String?) -> Void , process:((Progress)->())? = nil ) {
         let urlStr = mediaModel.urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
         func deal(url:URL){
             var fullPath = ""
@@ -260,7 +260,8 @@ class DDRequestManager: NSObject {
                 mylog("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\(fileURL.absoluteString)")
                 return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
             }
-            Alamofire.download(url, to: destination).response { response in
+            
+            let request = Alamofire.download(url, to: destination).response { response in
                 mylog(response)
                 mylog("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\(response.destinationURL)")
                 if response.error == nil, let filePath = response.destinationURL?.path {
@@ -271,6 +272,14 @@ class DDRequestManager: NSObject {
                 }else{
                     complate(nil)
                 }
+            }
+            request.downloadProgress { (progress ) in
+                process?(progress)
+                /*
+                 totalUnitCount: Int64
+                 The total number of units of work tracked for the current progress.
+                 var completedUnitCount: Int64
+                 */
             }
             
         }

@@ -137,10 +137,12 @@ extension DDItem3VC : UITableViewDelegate , UITableViewDataSource {
         
         //        type    string    1图文2视频
         
+        guard  let cell = tableView.cellForRow(at: indexPath) as? DDPeixunCell else {
+            return
+        }
         
         if let model = self.movieModels?[indexPath.row]{
             let fileName = model.name
-            
             var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 documentsURL.appendPathComponent(fileName)
             let localPath = documentsURL.path
@@ -151,10 +153,17 @@ extension DDItem3VC : UITableViewDelegate , UITableViewDataSource {
                 self.navigationController?.pushViewController(vc, animated: true )
                 selectedModel = model
             }else{
-                DDRequestManager.share.downFile(mediaModel: model) { (filePath ) in
+                mylog("去下载")
+                DDRequestManager.share.downFile(mediaModel: model , complate: { (filePath) in
                     mylog("下载完成")
                     self.tableView.reloadData()
+                }) { (progress ) in
+                    let hasDownload = Float(progress.completedUnitCount)
+                    let total = Float(progress.totalUnitCount)
+                    cell.processView.progress = hasDownload/total
+                    mylog(hasDownload/total)
                 }
+                
             }
             
             
@@ -229,15 +238,38 @@ extension DDItem3VC{
         var id : String?
     }
     class DDPeixunCell : UITableViewCell {
+        let processView = UIProgressView(frame: CGRect.zero)
+        override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+            super.init(style: style, reuseIdentifier: reuseIdentifier)
+            self.contentView.addSubview(processView)
+            processView.trackTintColor =  UIColor.DDLightGray
+            processView.tintColor =  UIColor.orange
+            processView.snp.makeConstraints { (make ) in
+                make.left.bottom.right.equalTo(self.contentView)
+                make.height.equalTo(1)
+            }
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        override func layoutSubviews() {
+            super.layoutSubviews()
+        }
         var mediaModel  : MediaModel?{
             didSet{
+                self.processView.progress = 0
                 var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
                 documentsURL.appendPathComponent(mediaModel?.name ?? "")
                 let localPath = documentsURL.path
                 if FileManager.default.fileExists(atPath:localPath) {
                     self.accessoryType = .checkmark
+//                    self.processView.isHidden = true
+                    self.processView.progress = 1
                 }else{
+                    self.processView.progress = 0
                     self.accessoryType = .none
+//                    self.processView.isHidden = false
                 }
                 layoutIfNeeded()
                 setNeedsLayout()

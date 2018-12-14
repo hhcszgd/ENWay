@@ -31,7 +31,6 @@ class DDItem3PlayVC: DDNormalVC {
             let h = (self.navigationController?.navigationBar.height ?? 0) + UIApplication.shared.statusBarFrame.height
             make.top.equalTo(self.view).offset(h)
             make.left.right.bottom.equalTo(self.view)
-            mylog("2 -> \(size)")
         }
         self.addNotificationObserver()
         
