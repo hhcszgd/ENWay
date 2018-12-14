@@ -19,6 +19,7 @@ enum DDMediaPlayResult : Error{
 }
 class MediaModel: NSObject , Codable {
     var name  = ""
+    var isDownload = false
     /// 资源的网络url  http://101.200.45.131/videos/xxx.mp4
     var urlString = "" {
         didSet{
@@ -177,13 +178,23 @@ extension DDMediaPlayProtocal{
     }
     @discardableResult
     private func judgePlay(mediaModel:MediaModel) ->  DDMediaPlayResult {
-        guard let url = URL(string: mediaModel.fileURLStr.replace(keyWord: " ", to: "%20"))  else {
-            return DDMediaPlayResult.failue("invalid url")
+        var url : URL = URL(fileURLWithPath: "")
+        if mediaModel.fileURLStr.contains("Bundle"){//load source in bundle
+            guard let tempurl = URL(string: mediaModel.fileURLStr.replace(keyWord: " ", to: "%20"))  else {
+                return DDMediaPlayResult.failue("invalid url")
+            }
+            url = tempurl
+        }else{//load resource in document of sandbox
+            guard let tempurl = URL(string: mediaModel.fileURLStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? "")  else {
+                return DDMediaPlayResult.failue("invalid url")
+            }
+            url = tempurl
         }
-        let musicName = url.lastPathComponent + ".\(url.pathExtension)"
+        
+
         let avplayitem = AVPlayerItem(url: url)
         self.player.replaceCurrentItem(with: avplayitem)
-        configureNowPlayingInfo(musicName:musicName)
+        configureNowPlayingInfo(musicName:mediaModel.name)
         mylog(self.mediaModels.index(of: mediaModel))
         mylog(self.mediaModels.firstIndex(of: mediaModel))
         mylog(self.mediaModels)

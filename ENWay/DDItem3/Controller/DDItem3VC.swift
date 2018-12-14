@@ -25,9 +25,14 @@ class DDItem3VC: DDNormalVC {
             // Fallback on earlier versions
             self.automaticallyAdjustsScrollViewInsets = false
         }
-        self.requestMyApi()
+//        self.requestMyApi()
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.requestMyApi()
+    }
+    
     func requestMyApi() {
         DDRequestManager.share.getVideosFromMyselfServer { (mp4Array) in
             if mp4Array.count == 0 {
@@ -70,7 +75,7 @@ class DDItem3VC: DDNormalVC {
         })
         movieModels = videoNames?.map({ (videoName ) -> MediaModel in
             let model = MediaModel()
-            model.fileURLStr =  documentsURL.absoluteString + "/\(videoName)"
+            model.fileURLStr =  documentsURL.absoluteString + "\(videoName)"
             //            model.name = url.lastPathComponent + ".\(url.pathExtension)"
             return model
         })
@@ -146,8 +151,9 @@ extension DDItem3VC : UITableViewDelegate , UITableViewDataSource {
                 self.navigationController?.pushViewController(vc, animated: true )
                 selectedModel = model
             }else{
-                DDRequestManager.share.downFile(urlStr: model.urlString) { (filePath ) in
+                DDRequestManager.share.downFile(mediaModel: model) { (filePath ) in
                     mylog("下载完成")
+                    self.tableView.reloadData()
                 }
             }
             
@@ -166,10 +172,13 @@ extension DDItem3VC : UITableViewDelegate , UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = self.movieModels?[indexPath.row]
+        
+        
         if let cell = tableView.dequeueReusableCell(withIdentifier: "DDPeixunCell") as? DDPeixunCell{
             cell.textLabel?.text = model?.name
             cell.contentView.backgroundColor = DDBackgroundColor1
             cell.textLabel?.textColor = DDTitleColor1
+            cell.mediaModel = model
             return cell
         }else{
             
@@ -177,6 +186,7 @@ extension DDItem3VC : UITableViewDelegate , UITableViewDataSource {
             cell.contentView.backgroundColor = DDBackgroundColor1
             cell.textLabel?.textColor = DDTitleColor1
             cell.textLabel?.text = model?.name
+            cell.mediaModel = model
             return cell
         }
     }
@@ -218,6 +228,22 @@ extension DDItem3VC{
         var type : String?
         var id : String?
     }
-    class DDPeixunCell : UITableViewCell {  }
+    class DDPeixunCell : UITableViewCell {
+        var mediaModel  : MediaModel?{
+            didSet{
+                var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                documentsURL.appendPathComponent(mediaModel?.name ?? "")
+                let localPath = documentsURL.path
+                if FileManager.default.fileExists(atPath:localPath) {
+                    self.accessoryType = .checkmark
+                }else{
+                    self.accessoryType = .none
+                }
+                layoutIfNeeded()
+                setNeedsLayout()
+            }
+        }
+        
+    }
 }
 

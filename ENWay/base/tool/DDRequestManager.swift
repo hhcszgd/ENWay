@@ -247,12 +247,12 @@ class DDRequestManager: NSObject {
   
     
     
-    func downFile(urlStr : String  , complate:@escaping (String?) -> Void) {
-        let urlStr = urlStr.replace(keyWord: " ", to: "%20")
+    func downFile(mediaModel : MediaModel  , complate:@escaping (String?) -> Void) {
+        let urlStr = mediaModel.urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
         func deal(url:URL){
             var fullPath = ""
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let fileName = url.lastPathComponent
+            let fileName = mediaModel.name
             let fileURL = documentsURL.appendingPathComponent(fileName)
             let destination: DownloadRequest.DownloadFileDestination = { _, _ in
                 //            let fileURL = documentsURL.appendPathComponent("pig.png")
@@ -277,7 +277,7 @@ class DDRequestManager: NSObject {
         
         if let url = URL(string: urlStr){
             deal(url: url)
-        }else if let url = URL(string: urlStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.whitespaces) ?? ""){
+        }else if let url = URL(string: urlStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""){
             deal(url: url)
         }else{
             complate(nil)
