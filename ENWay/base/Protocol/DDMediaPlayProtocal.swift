@@ -19,17 +19,54 @@ enum DDMediaPlayResult : Error{
 }
 class MediaModel: NSObject , Codable {
     var name  = ""
-//    var urlStr = ""
-    var size = ""
-    var url : URL?{
+    /// 资源的网络url  http://101.200.45.131/videos/xxx.mp4
+    var urlString = "" {
         didSet{
-            if let url = url {
-                name = url.lastPathComponent + ".\(url.pathExtension)"
+            if let url = URL(string: urlString){
+                name = url.lastPathComponent
+                var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                documentsURL.appendPathComponent(name)
+                self.fileURLStr = documentsURL.path
             }else{
-                name = "unknownName"
+                if let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed ) ?? ""){
+                    name = url.lastPathComponent
+                    var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                    documentsURL.appendPathComponent(name)
+                    self.fileURLStr = documentsURL.path
+                }else{
+                    name = "unknownName"
+                }
             }
         }
     }
+    /// 资源的本地url  file:///user/Home/wy/mysource/xxx.mp4
+    var fileURLStr = ""{
+        didSet{
+            if !fileURLStr.hasPrefix("file://"){
+                fileURLStr =  ("file://" + fileURLStr)
+            }
+            
+            if let url = URL(string: fileURLStr){
+                name = url.lastPathComponent
+            }else{
+                if let url = URL(string: fileURLStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed ) ?? ""){
+                    name = url.lastPathComponent
+                }else{
+                    name = "unknownName"
+                }
+            }
+        }
+    }
+    var size = ""
+//    var url : URL?{
+//        didSet{
+//            if let url = url {
+//                name = url.lastPathComponent + ".\(url.pathExtension)"
+//            }else{
+//                name = "unknownName"
+//            }
+//        }
+//    }
     var mediaType : DDMediaType = .sound
 }
 protocol DDMediaPlayProtocal: NSObjectProtocol {
@@ -100,7 +137,7 @@ extension DDMediaPlayProtocal{
         
         almostPlayCallback(mediaModel: mediaModel!)
         if let avurlAsset = self.player.currentItem?.asset as? AVURLAsset {
-            if let url = mediaModel?.url?.absoluteString{
+            if let url = mediaModel?.fileURLStr{
                 if avurlAsset.url.absoluteString == url{
                     switch  self.player.timeControlStatus {
                     case .playing:
@@ -109,7 +146,7 @@ extension DDMediaPlayProtocal{
                         mylog(self.player.currentItem?.duration.seconds)
                         mylog(self.player.currentItem?.currentTime().seconds)
                         if let duration = self.player.currentItem?.duration.seconds , let currentTime = self.player.currentItem?.currentTime().seconds , duration == currentTime{//当前播完 , 且在起点
-                            if let url = mediaModel?.url{
+                            if let url = URL(string: mediaModel?.fileURLStr ?? ""){
                                 self.player.replaceCurrentItem(with: AVPlayerItem(url: url))
                                 self.player.play()
                             }else{
@@ -140,7 +177,7 @@ extension DDMediaPlayProtocal{
     }
     @discardableResult
     private func judgePlay(mediaModel:MediaModel) ->  DDMediaPlayResult {
-        guard let url = mediaModel.url  else {
+        guard let url = URL(string: mediaModel.fileURLStr.replace(keyWord: " ", to: "%20"))  else {
             return DDMediaPlayResult.failue("invalid url")
         }
         let musicName = url.lastPathComponent + ".\(url.pathExtension)"
@@ -161,7 +198,7 @@ extension DDMediaPlayProtocal{
     
     func pause() {
         self.player.pause()
-        if self.mediaModels.count >= currentMediaIndex{
+        if self.mediaModels.count >= currentMediaIndex , currentMediaIndex >= 0{
             pauseCallback(mediaModel: self.mediaModels[currentMediaIndex])
         }else{
             pauseCallback(mediaModel: MediaModel())
@@ -327,15 +364,15 @@ extension DDMediaPlayProtocal{
                     if let playerItem = notification.object as? AVPlayerItem , let urlAsset = playerItem.asset as? AVURLAsset {
                         mylog(ssss.mediaModels.count)
                         mylog(ssss.currentMediaIndex)
-                        if urlAsset.url.absoluteString == ssss.mediaModels[ssss.currentMediaIndex].url?.absoluteString ?? ""{
+                        if urlAsset.url.absoluteString == ssss.mediaModels[ssss.currentMediaIndex].fileURLStr {
                             mo = ssss.mediaModels[ssss.currentMediaIndex]
                         }else{
-                            mo.url = urlAsset.url
+                            mo.fileURLStr = urlAsset.url.absoluteString
                         }
                     }
                 }else{
                     if let playerItem = notification.object as? AVPlayerItem , let urlAsset = playerItem.asset as? AVURLAsset {
-                        mo.url = urlAsset.url
+                        mo.fileURLStr = urlAsset.url.absoluteString
                     }
                 }
                 

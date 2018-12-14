@@ -66,6 +66,18 @@
                 <false/>
             </dict>
            
+           <key>172.16.4.36</key>
+           <dict>
+               <key>NSExceptionMinimumTLSVersion</key>
+               <string>TLSv1.0</string>
+               <key>NSIncludesSubdomains</key>
+               <true/>
+               <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+               <true/>
+               <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+               <false/>
+           </dict>
+           
            
         </dict>
     </dict>

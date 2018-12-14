@@ -11,13 +11,6 @@ import CryptoSwift
 import CoreLocation
 let DDTitleColor1 = UIColor.brown
 let DDBackgroundColor1 = UIColor.green.withAlphaComponent(0.3)
-class MusicModel: NSObject , Codable {
-    var name  = ""
-    var urlStr = ""
-    var size = ""
-    var url : URL?
-}
-
 
 
 class DDItem1VC: DDNormalVC {
@@ -31,7 +24,7 @@ class DDItem1VC: DDNormalVC {
         
         musicModels = self.gotResourceInSubBundle()?.map({ (url ) -> MediaModel in
             let model = MediaModel()
-            model.url = url
+            model.fileURLStr = url.absoluteString
             model.name = url.lastPathComponent + ".\(url.pathExtension)"
             return model
         })
@@ -64,44 +57,21 @@ class DDItem1VC: DDNormalVC {
     @objc func setting(sender:UIButton) {
         self.navigationController?.pushViewController(SettingVC(), animated: true)
     }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
     func gotResourceInSubBundle() -> [URL]? {
-        //        let bundle : Bundle = Bundle(for: AHPAPI.self)       //refreshBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[MJRefreshComponent class]] pathForResource:@"MJRefresh" ofType:@"bundle"]];
-        
         let bundle = Bundle.main
         guard let subBundlePath = bundle.path(forResource: "Music", ofType: "bundle") else {return nil}
         guard let subBundle = Bundle(path: subBundlePath) else {return nil  }
         return subBundle.urls(forResourcesWithExtension: "mp3", subdirectory: nil)
-        
-        //    guard let subBundlePath = Bundle.main.path(forResource: "Resource", ofType: "bundle") else {return nil}
-        //    guard let subBundle = Bundle(path: subBundlePath) else {return nil  }
-        //    if let tempDirectory = directory {
-        //        guard let itemPath = subBundle.path(forResource: name, ofType: type, inDirectory: tempDirectory) else {return nil}
-        //        return itemPath
-        //    }else{
-        //        guard let  itemPath = subBundle.path(forResource: name, ofType: type) else {  return nil  }
-        //        return itemPath
-        //    }
+
     }
     func gotPDFInSubBundle() -> [MediaModel]? {
-        //        let bundle : Bundle = Bundle(for: AHPAPI.self)       //refreshBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[MJRefreshComponent class]] pathForResource:@"MJRefresh" ofType:@"bundle"]];
-        
         let bundle = Bundle.main
         guard let subBundlePath = bundle.path(forResource: "Music", ofType: "bundle") else {return nil}
         guard let subBundle = Bundle(path: subBundlePath) else {return nil  }
         var pdfs = subBundle.urls(forResourcesWithExtension: "pdf", subdirectory: nil)
         var temp  = pdfs?.map({ (url ) -> MediaModel in
             let model = MediaModel()
-            model.url = url
+            model.fileURLStr = url.absoluteString
             model.name = url.lastPathComponent + ".\(url.pathExtension)"
             return model
         })
@@ -110,17 +80,6 @@ class DDItem1VC: DDNormalVC {
         })
         
         return temp
-        
-        
-        //    guard let subBundlePath = Bundle.main.path(forResource: "Resource", ofType: "bundle") else {return nil}
-        //    guard let subBundle = Bundle(path: subBundlePath) else {return nil  }
-        //    if let tempDirectory = directory {
-        //        guard let itemPath = subBundle.path(forResource: name, ofType: type, inDirectory: tempDirectory) else {return nil}
-        //        return itemPath
-        //    }else{
-        //        guard let  itemPath = subBundle.path(forResource: name, ofType: type) else {  return nil  }
-        //        return itemPath
-        //    }
     }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         coordinator.animateAlongsideTransition(in: tableView, animation: { (context ) in
@@ -154,30 +113,16 @@ extension DDItem1VC : UITableViewDelegate , UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        MusicPlayer.share.currentMusicIndex = indexPath.row
-        //        if let name = musicModels?[indexPath.row].name {
-        //            var  para  = [String: Any]()
-        //            para["currentSong"] = indexPath.row
-        //            para["songsArr"] = musicModels
-        //            para["pdfs"] = self.pdfModels
-        
-//        let vc = PlayVC()
+
         let vc = DDMusicPlayVC1()
-        
-        //        vc.musicModel = musicModels
-        //        vc.pdfModels = pdfModels
         vc.currentMediaModel = self.musicModels?[indexPath.row]
-        vc.userInfo = pdfModels?[indexPath.row].url?.absoluteString
+//        vc.userInfo = pdfModels?[indexPath.row].url?.absoluteString
         self.navigationController?.pushViewController(vc , animated: true )
-        //            self.pushVC(vcIdentifier: "PlayVC", userInfo:para)
-        //        }
-        
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return self.musicModels?.count ?? 0
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -187,8 +132,6 @@ extension DDItem1VC : UITableViewDelegate , UITableViewDataSource{
         }else{
             cell = UITableViewCell.init(style: UITableViewCell.CellStyle.default, reuseIdentifier: "UITableViewCell_music")
         }
-        //        cell.backgroundColor = UIColor.init(red:CGFloat (arc4random() % 256) / 256, green: CGFloat((arc4random() % 256) / 256), blue:CGFloat((arc4random() % 256) / 256), alpha: 1)
-        
         cell.textLabel?.text = self.musicModels?[indexPath.row].name
         cell.contentView.backgroundColor = DDBackgroundColor1
         cell.textLabel?.textColor = DDTitleColor1

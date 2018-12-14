@@ -1,15 +1,14 @@
 //
-//  VideoListVC.swift
-//  PHPAPI
+//  DDItem3VC.swift
+//  ENWay
 //
-//  Created by WY on 2018/10/18.
-//  Copyright © 2018 HHCSZGD. All rights reserved.
+//  Created by WY on 2018/12/13.
+//  Copyright © 2018 WY. All rights reserved.
 //
 
 import UIKit
-class VideoListVC: DDNormalVC {
 
- 
+class DDItem3VC: DDNormalVC {
     let tableView = UITableView.init(frame: CGRect.zero, style: UITableView.Style.plain)
     var movieModels :  [MediaModel]?
     var statusIsHidden = false
@@ -18,7 +17,7 @@ class VideoListVC: DDNormalVC {
     var selectedModel : MediaModel?
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "视频列表"
+        self.title = "online"
         configTableView()
         if #available(iOS 11.0, *) {
             self.tableView.contentInsetAdjustmentBehavior = .never
@@ -26,11 +25,28 @@ class VideoListVC: DDNormalVC {
             // Fallback on earlier versions
             self.automaticallyAdjustsScrollViewInsets = false
         }
-        self.tableView.reloadData()
+        self.requestMyApi()
         
     }
-    
-    func configTableView() {  
+    func requestMyApi() {
+        DDRequestManager.share.getVideosFromMyselfServer { (mp4Array) in
+            if mp4Array.count == 0 {
+                self.gotResourceFromDocumentDir()
+            }else{
+                self.movieModels = mp4Array.map({ (str ) -> MediaModel in
+                    let m = MediaModel()
+                    m.urlString = str
+                    return m
+                })
+            }
+            self.tableView.reloadData()
+        }
+        
+        
+        
+        
+    }
+    func configTableView() {
         self.view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -41,15 +57,30 @@ class VideoListVC: DDNormalVC {
             let h = (self.navigationController?.navigationBar.height ?? 0) + UIApplication.shared.statusBarFrame.height
             make.top.equalTo(self.view).offset(h)
             make.left.right.bottom.equalTo(self.view)
-            mylog("2 -> \(size)")
         }
-//        tableView.tableHeaderView = self.tableHeader
-        //        DDPlayerView.init(frame: CGRect(x: 0, y: 0, width: SCREENWIDTH , height:SCREENWIDTH * 0.7), superView: self.tableHeader, urlStr: "http://1252719796.vod2.myqcloud.com/e7d81610vodgzp1252719796/27444c997447398156401949676/QHAfaCW5HiEA.mp4")
-        gotResourceInSubBundle()
+//        gotResourceInSubBundle()
     }
-    func gotResourceInSubBundle() {
-        //        let bundle : Bundle = Bundle(for: AHPAPI.self)       //refreshBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[MJRefreshComponent class]] pathForResource:@"MJRefresh" ofType:@"bundle"]];
+    func gotResourceFromDocumentDir() {
         
+        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        FileManager.default.urls(for: FileManager.SearchPathDirectory.documentationDirectory, in: FileManager.SearchPathDomainMask.allDomainsMask)
+        let files = try? FileManager.default.contentsOfDirectory(atPath: documentsURL.path)
+        let videoNames = files?.filter({ (fileName) -> Bool in
+            return fileName.contains("mp4")
+        })
+        movieModels = videoNames?.map({ (videoName ) -> MediaModel in
+            let model = MediaModel()
+            model.fileURLStr =  documentsURL.absoluteString + "/\(videoName)"
+            //            model.name = url.lastPathComponent + ".\(url.pathExtension)"
+            return model
+        })
+        movieModels?.sort(by: { (modelLeft, modelRight) -> Bool in
+            modelLeft.name < modelRight.name
+        })
+        
+    }
+    
+    func gotResourceInSubBundle() {
         let bundle = Bundle.main
         guard let subBundlePath = bundle.path(forResource: "Movie", ofType: "bundle") else {return }
         guard let subBundle = Bundle(path: subBundlePath) else {return   }
@@ -95,18 +126,34 @@ class VideoListVC: DDNormalVC {
     }
 }
 
-extension VideoListVC : UITableViewDelegate , UITableViewDataSource {
+extension DDItem3VC : UITableViewDelegate , UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         //        type    string    1图文2视频
         
+        
         if let model = self.movieModels?[indexPath.row]{
-            let vc = DDVideoPlayVC()
-            vc.movieModels  = self.movieModels ?? []
-            vc.movieModel = model
-            self.navigationController?.pushViewController(vc, animated: true )
+            let fileName = model.name
+            
+            var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                documentsURL.appendPathComponent(fileName)
+            let localPath = documentsURL.path
+            if FileManager.default.fileExists(atPath:localPath) {
+                let vc = DDItem3PlayVC()
+                vc.movieModels  = self.movieModels ?? []
+                vc.movieModel = model
+                self.navigationController?.pushViewController(vc, animated: true )
                 selectedModel = model
+            }else{
+                DDRequestManager.share.downFile(urlStr: model.urlString) { (filePath ) in
+                    mylog("下载完成")
+                }
+            }
+            
+            
+            
+            
         }
     }
     
@@ -133,9 +180,30 @@ extension VideoListVC : UITableViewDelegate , UITableViewDataSource {
             return cell
         }
     }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if let model = self.movieModels?[indexPath.row]{
+            let fileName = model.name
+            
+            var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            documentsURL.appendPathComponent(fileName)
+            let localPath = documentsURL.path
+            if FileManager.default.fileExists(atPath:localPath) {
+               try? FileManager.default.removeItem(atPath: localPath)
+                tableView.reloadData()
+            }
+            
+            
+            
+            
+        }
+    }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
 }
 import SDWebImage
-extension VideoListVC{
+extension DDItem3VC{
     class DDPeixunDataModel : NSObject , Codable{
         var items : [DDPeixunSourceModel]?
         var top_img : String?
@@ -152,19 +220,4 @@ extension VideoListVC{
     }
     class DDPeixunCell : UITableViewCell {  }
 }
-class DDPeixunHeader : UIView{
-    let imageView = UIImageView()
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.addSubview(imageView)
-        imageView.image = UIImage(named: "view")
-    }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        imageView.frame = self.bounds
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
+

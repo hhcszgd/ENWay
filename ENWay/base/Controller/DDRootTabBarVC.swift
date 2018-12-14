@@ -27,6 +27,7 @@ class DDRootTabBarVC: UITabBarController {
         var controllers = [UIViewController]()
         controllers.append(DDItem1NavVC())
         controllers.append(DDItem2NavVC())
+        controllers.append(DDItem3NaviVC())
         return controllers
     }
     required init?(coder aDecoder: NSCoder) {

@@ -20,11 +20,11 @@ class DDMusicPlayVC1: DDOnceBackWebVC {
         }
         
         //        self.view.backgroundColor = UIColor.orange
-        let lastPathComponent = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.lastPathComponent ?? "name"
-        let pathExtension = self.currentMediaModel?.url?.pathExtension ?? "extexsion"
+//        let lastPathComponent = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.lastPathComponent ?? "name"
+//        let pathExtension = self.currentMediaModel?.url?.pathExtension ?? "extexsion"
         
-        self.title = lastPathComponent + pathExtension
-        //       self.loadPdf()
+        self.title = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].name
+        self.loadPdf()
         NotificationCenter.default.addObserver(self , selector: #selector(loadPdf), name: Notification.Name("ReloadPdfNotification"), object: DDAVPlayer1.share)
         self.confitRightButton()
         // Do any additional setup after loading the view.
@@ -61,12 +61,12 @@ class DDMusicPlayVC1: DDOnceBackWebVC {
     }
     @objc func loadPdf() {
         mylog("重载")
-        let lastPathComponent = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.lastPathComponent ?? "name"
-        let pathExtension = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.pathExtension ?? "extexsion"
+//        let lastPathComponent = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.lastPathComponent ?? "name"
+//        let pathExtension = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].url?.pathExtension ?? "extexsion"
         
-        self.title = lastPathComponent + pathExtension
+        self.title = DDAVPlayer1.share.mediaModels[DDAVPlayer1.share.currentMediaIndex].name
         let pdfModel = DDAVPlayer1.share.pdfModels?[DDAVPlayer1.share.currentMediaIndex]
-        if let url = pdfModel?.url {
+        if let url = URL(string: pdfModel?.fileURLStr ?? "") {
             self.webView.load(URLRequest(url: url))
         }
     }

@@ -1,15 +1,14 @@
 //
-//  DDVideoPlayVC.swift
+//  DDItem3PlayVC.swift
 //  ENWay
 //
-//  Created by WY on 2018/12/11.
+//  Created by WY on 2018/12/14.
 //  Copyright © 2018 WY. All rights reserved.
 //
 
 import UIKit
 
-private let TableHeight = SCREENWIDTH  * 540 / 960
-class DDVideoPlayVC: DDNormalVC {
+class DDItem3PlayVC: DDNormalVC {
 
     //视频比例是960 * 540
     var movieModel :   MediaModel = MediaModel()
@@ -17,7 +16,7 @@ class DDVideoPlayVC: DDNormalVC {
     var statusIsHidden = false
     lazy var playView : DDPlayerView = {
         let playView : DDPlayerView =  DDPlayerView.init(frame: CGRect.zero, mediaModel: movieModel , mediaModels: movieModels)
-//        playView.mediaModels = movieModels
+        //        playView.mediaModels = movieModels
         playView.backgroundColor = UIColor.green
         playView.justPlayedHandler = {[weak self] mediamodel in
             self?.title = mediamodel.name
@@ -58,7 +57,7 @@ class DDVideoPlayVC: DDNormalVC {
             make.top.bottom.left.right.equalTo(self.view)
         }
     }
-   
+    
     override var prefersStatusBarHidden: Bool{
         return statusIsHidden //return make for hidding statusBar , and navigationBar become shortter than normal
     }
@@ -104,21 +103,7 @@ class DDVideoPlayVC: DDNormalVC {
 
 
 import SDWebImage
-extension DDVideoPlayVC{
-    class DDPeixunDataModel : NSObject , Codable{
-        var items : [DDPeixunSourceModel]?
-        var top_img : String?
-    }
-    class DDPeixunSourceSuperModel : NSObject{
-        var isSelected = false
-    }
-    class DDPeixunSourceModel : DDPeixunSourceSuperModel , Codable{
-        var content : String?
-        var name : String?
-        var thumbnail : String?
-        var type : String?
-        var id : String?
-    }
+extension DDItem3PlayVC{
     class DDPeixunCell : UITableViewCell {
         
     }

@@ -247,40 +247,42 @@ class DDRequestManager: NSObject {
   
     
     
-    func downFile(complate:@escaping (String?) -> Void) {
-        var fullPath = ""
-        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+    func downFile(urlStr : String  , complate:@escaping (String?) -> Void) {
+        let urlStr = urlStr.replace(keyWord: " ", to: "%20")
+        func deal(url:URL){
+            var fullPath = ""
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let fileURL = documentsURL.appendingPathComponent("xxx.pdf")
-//            let fileURL = documentsURL.appendPathComponent("pig.png")
-            fullPath = fileURL.absoluteString
-            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
-            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\(documentsURL)")
-        }
-        let urlString = "http://i1.bjyltf.com/agreement/48.pdf"
-        Alamofire.download(urlString, to: destination).response { response in
-            print(response)
-            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\(response.destinationURL)")
-            if response.error == nil, let filePath = response.destinationURL?.path {
-//                let image = UIImage(contentsOfFile: imagePath)
-                complate(fullPath)
-            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\(filePath)")
-                
-            }else{
-                complate(nil)
+            let fileName = url.lastPathComponent
+            let fileURL = documentsURL.appendingPathComponent(fileName)
+            let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+                //            let fileURL = documentsURL.appendPathComponent("pig.png")
+//                fullPath = fileURL.absoluteString
+                mylog("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\(fileURL.absoluteString)")
+                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
             }
+            Alamofire.download(url, to: destination).response { response in
+                mylog(response)
+                mylog("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\(response.destinationURL)")
+                if response.error == nil, let filePath = response.destinationURL?.path {
+                    //                let image = UIImage(contentsOfFile: imagePath)
+                    complate(fileURL.absoluteString)
+                    mylog("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\(filePath)")
+                    
+                }else{
+                    complate(nil)
+                }
+            }
+            
         }
         
-    }
-    
-    
-    
-    /// messageDetail
-    @discardableResult
-    func messageDetail(messageID:String, _ print : Bool = false ) -> DataRequest? {
-        let url  =  "member/\(DDAccount.share.id ?? "0")/message/\(messageID)"//TODO 1 替换成真实memberID
-        let para = ["token" : DDAccount.share.token ?? "" ]
-        return  performRequest(url: url , method: HTTPMethod.get, parameters: para , print : print )
+        if let url = URL(string: urlStr){
+            deal(url: url)
+        }else if let url = URL(string: urlStr.addingPercentEncoding(withAllowedCharacters: CharacterSet.whitespaces) ?? ""){
+            deal(url: url)
+        }else{
+            complate(nil)
+        }
+        
     }
     
     
@@ -489,12 +491,14 @@ extension DDRequestManager {
     }
     
     /// GET
-    func testMyselfServer(){
-        let url = "http://101.200.45.131/phpOfPublic/ConnectMysql.php"
-        self.requestMyselfServer(type: [String:String].self , method: HTTPMethod.get, url: url , parameters: nil , needToken: false , autoAlertWhileFailure: true , success: { (result ) in
+    func getVideosFromMyselfServer(complated:@escaping (([String])->())){
+        let url = "http://172.16.4.36/get_video.php"
+        self.requestMyselfServer(type: [String].self , method: HTTPMethod.get, url: url , parameters: nil , needToken: false , autoAlertWhileFailure: true , success: { (result ) in
             mylog(result)
-        }, failure: { (error ) in
+            complated(result)
             
+        }, failure: { (error ) in
+            complated([])
         }) {
             
         }
