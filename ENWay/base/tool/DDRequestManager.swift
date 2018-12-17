@@ -514,6 +514,26 @@ extension DDRequestManager {
         
 //        self.requestMyselfServer(type: String.self , method: HTTPMethod.get, url: "http://101.200.45.131/phpOfPublic/ConnectMysql.php", success: (T) -> ())
     }
+    
+    /// GET
+    func testPostParameter(complated:@escaping (([String])->())){
+//        let url = "http://ddshop.com/dd/playground/printParameter"
+        let url = "http://ddshop.com/index.php/dd/playground/printParameter"
+        let para = ["hello":"world"];
+        self.requestMyselfServer(type: [String].self , method: HTTPMethod.post, url: url , parameters: para , needToken: false , autoAlertWhileFailure: true , success: { (result ) in
+            mylog(result)
+            complated(result)
+            
+        }, failure: { (error ) in
+            mylog(error)
+            complated(["xxxxxxx"])
+        }) {
+            
+        }
+        
+        //        self.requestMyselfServer(type: String.self , method: HTTPMethod.get, url: "http://101.200.45.131/phpOfPublic/ConnectMysql.php", success: (T) -> ())
+    }
+    
 }
 extension DDRequestManager{
     

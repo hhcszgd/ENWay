@@ -16,6 +16,15 @@ class SettingVC: DDNormalVC {
         self.title = "设置"
         // Do any additional setup after loading the view.
         configTime()
+        testPostMethos()
+        
+        
+    }
+    
+    func testPostMethos () {
+        DDRequestManager.share.testPostParameter { (ppp ) in
+            mylog(ppp )
+        }
     }
     func configTime()  {
         self.view.addSubview(timeButton)
